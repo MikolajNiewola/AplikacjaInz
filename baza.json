@@ -1,0 +1,75 @@
+{
+    "exercises":[
+        {
+            "id": 1,
+            "name":"Wyciskanie sztangi leżąc",
+            "muscle_group":
+            [
+                {"name":"klatka piersiowa", "load":9},
+                {"name":"triceps", "load":3},
+                {"name":"biceps", "load":1},
+                {"name":"core", "load":2},
+                {"name":"plecy", "load":3}
+            ],
+            "equipment":"sztanga, ławka",
+            "type":"siłowy",
+            "difficulty":"średni",
+            "instructions":
+            [
+                "Połóż się na ławce płaskiej, stopy na podłodze.",
+                "Chwyć sztangę nieco szerzej niż szerokość barków.",
+                "Opuść sztangę kontrolowanym ruchem do klatki piersiowej.",
+                "Wypchnij sztangę z powrotem do pozycji wyjściowej, prostując ramiona."
+            ],
+            "image":"wyciskanie_sztangi_leżąc.jpg",
+            "video":"https://www.youtube.com/watch?v=pS6FPxGTt6Y"
+        },
+        {
+            "id": 2,
+            "name":"Przysiady ze sztangą",
+            "muscle_group":
+            [
+                {"name":"nogi", "load":8},
+                {"name":"pośladki", "load":7},
+                {"name":"core", "load":4},
+                {"name":"plecy", "load":3}
+            ],
+            "equipment":"sztanga",
+            "type":"siłowy",
+            "difficulty":"trudny",
+            "instructions":
+            [
+                "Ustaw sztangę na górnej części pleców, stopy na szerokość barków.",
+                "Zegnij kolana i opuść ciało w dół, jakbyś siadał na krześle.",
+                "Utrzymaj plecy proste i kolana nad stopami.",
+                "Wróć do pozycji wyjściowej, prostując nogi."
+            ],
+            "image":"przysiady_ze_sztangą.jpg",
+            "video":"url_do_filmu"
+        },
+        {
+            "id": 3,
+            "name":"Martwy ciąg",
+            "muscle_group":
+            [
+                {"name":"plecy", "load":9},
+                {"name":"nogi", "load":7},
+                {"name":"pośladki", "load":6},
+                {"name":"core", "load":4},
+                {"name":"ramiona", "load":3}
+            ],
+            "equipment":"sztanga",
+            "type":"siłowy",
+            "difficulty":"trudny",
+            "instructions":
+            [
+                "Stań prosto ze stopami na szerokość bioder, sztanga przed tobą.",
+                "Zegnij biodra i kolana, chwyć sztangę na szerokość barków.",
+                "Utrzymując plecy proste, unieś sztangę, prostując nogi i biodra.",
+                "Opuść sztangę kontrolowanym ruchem z powrotem na podłogę."
+            ],
+            "image":"martwy_ciag.jpg",
+            "video":"url_do_filmu"
+        }
+    ]
+}
