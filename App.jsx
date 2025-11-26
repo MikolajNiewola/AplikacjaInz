@@ -7,7 +7,10 @@ import Home from './Screens/Home';
 import Settings from './Screens/Settings';
 import Exercises from './Screens/Exercises';
 import MuscleMap from './Screens/MuscleMap';
-import WorkoutPlan from './Screens/WorkoutPlan';
+import WorkoutPlans from './Screens/WorkoutPlans';
+
+import CreatePlan from './Components/WorkoutPlans/CreatePlan';
+import ViewPlan from './Components/WorkoutPlans/ViewPlan';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +21,11 @@ const Rootstack = () => {
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Exercises" component={Exercises} />
       <Stack.Screen name="Muscle Map" component={MuscleMap} />
-      <Stack.Screen name="Workout Plan" component={WorkoutPlan} />
+      <Stack.Screen name="Workout Plans" component={WorkoutPlans} />
+
+      <Stack.Screen name="CreatePlan" component={CreatePlan} />
+      <Stack.Screen name="ViewPlan" component={ViewPlan} />
+      
     </Stack.Navigator>
   );
 };
