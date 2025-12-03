@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native';
 
 const AddExercise = ({ exercise, onChange }) => {    
-    const [reps, setReps] = useState(0);
-    const [sets, setSets] = useState(0);
+    const [reps, setReps] = useState(5);
+    const [sets, setSets] = useState(3);
     const [weight, setWeight] = useState(0);
 
     const incRepCounter = () => { setReps(reps + 1); }

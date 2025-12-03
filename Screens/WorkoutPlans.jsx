@@ -28,13 +28,13 @@ const WorkoutPlans = () => {
 
       {plans.map((plan) => (
         <View key={plan.id}>
-          <TouchableOpacity onPress={() => navigation.navigate('ViewPlan', { plan })}>
+          <TouchableOpacity onPress={() => navigation.navigate('View Plan', { plan })}>
             <Text>{plan.name}</Text>
           </TouchableOpacity>
         </View>
       ))}
 
-      <TouchableOpacity onPress={() => navigation.navigate('CreatePlan')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Create Plan')}>
         <Text>+ New Plan</Text>
       </TouchableOpacity>
     </View>

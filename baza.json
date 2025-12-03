@@ -1,14 +1,14 @@
 {
     "exercises":[
         {
-            "id": 1,
+            "id": 0,
             "name":"Wyciskanie sztangi leżąc",
             "muscle_group":
             [
-                {"name":"klatka piersiowa", "load":9},
+                {"name":"piersiowy", "load":9},
                 {"name":"triceps", "load":3},
                 {"name":"biceps", "load":1},
-                {"name":"core", "load":2},
+                {"name":"gornybrzucha", "load":2},
                 {"name":"plecy", "load":3}
             ],
             "equipment":"sztanga, ławka",
@@ -25,13 +25,13 @@
             "video":"https://www.youtube.com/watch?v=pS6FPxGTt6Y"
         },
         {
-            "id": 2,
+            "id": 1,
             "name":"Przysiady ze sztangą",
             "muscle_group":
             [
-                {"name":"nogi", "load":8},
-                {"name":"pośladki", "load":7},
-                {"name":"core", "load":4},
+                {"name":"czworoglowy", "load":8},
+                {"name":"posladkowy", "load":7},
+                {"name":"gornybrzucha", "load":4},
                 {"name":"plecy", "load":3}
             ],
             "equipment":"sztanga",
@@ -48,15 +48,15 @@
             "video":"url_do_filmu"
         },
         {
-            "id": 3,
+            "id": 2,
             "name":"Martwy ciąg",
             "muscle_group":
             [
                 {"name":"plecy", "load":9},
-                {"name":"nogi", "load":7},
-                {"name":"pośladki", "load":6},
-                {"name":"core", "load":4},
-                {"name":"ramiona", "load":3}
+                {"name":"czworoglowy", "load":7},
+                {"name":"posladkowy", "load":6},
+                {"name":"gornybrzucha", "load":4},
+                {"name":"naramienny", "load":3}
             ],
             "equipment":"sztanga",
             "type":"siłowy",

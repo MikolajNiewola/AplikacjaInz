@@ -10,10 +10,12 @@ const CreatePlan = () => {
 
   const [planName, setPlanName] = useState('');
   const [selectedExercises, setSelectedExercises] = useState([]);
+  const [availableExercises, setAvailableExercises] = useState(data.exercises);
   const [workouts, setWorkouts] = useState([]);
 
   const addExerciseToPlan = (exercise) => {
     setSelectedExercises(prev => [ ...prev, {...exercise, reps: 0, sets: 0, weight: 0} ])
+    setAvailableExercises(prev => prev.filter(ex => ex.id !== exercise.id));
   };
 
   const updateExerciseInPlan = (id, fields) => {
@@ -37,8 +39,9 @@ const CreatePlan = () => {
       id: getLastId(),
       name: planName,
       exercises: selectedExercises.map((exercise) => ({
-        name: exercise.name,
+        // name: exercise.name,
         id: exercise.id,
+
         reps: exercise.reps,
         sets: exercise.sets,
         weight: exercise.weight,
@@ -79,7 +82,7 @@ const CreatePlan = () => {
 
       <Text>Available Exercises:</Text>
       <ScrollView style={{ height: 200 }}>
-        {data.exercises.map((exercise) => (
+        {availableExercises.map((exercise) => (
           <View key={exercise.id}>
             <Text>{exercise.name}</Text>
             <TouchableOpacity onPress={() => addExerciseToPlan(exercise)}>

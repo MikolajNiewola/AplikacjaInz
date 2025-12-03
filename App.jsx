@@ -23,8 +23,8 @@ const Rootstack = () => {
       <Stack.Screen name="Muscle Map" component={MuscleMap} />
       <Stack.Screen name="Workout Plans" component={WorkoutPlans} />
 
-      <Stack.Screen name="CreatePlan" component={CreatePlan} />
-      <Stack.Screen name="ViewPlan" component={ViewPlan} />
+      <Stack.Screen name="Create Plan" component={CreatePlan} />
+      <Stack.Screen name="View Plan" component={ViewPlan} />
       
     </Stack.Navigator>
   );
