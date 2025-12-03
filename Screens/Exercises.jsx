@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import React, { use, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import data from '../baza.json';
 
 const ExerciseCard = ({ item, expanded, onToggle }) => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.card}>
       <View style={styles.banner}>
@@ -19,21 +15,25 @@ const ExerciseCard = ({ item, expanded, onToggle }) => {
       </View>
 
       <TouchableOpacity style={styles.button} onPress={() => onToggle(item.id)}>
-        <Text style={styles.buttonText}>{expanded ? 'Zwiń' : 'Rozwiń'}</Text>
+        <Text style={styles.buttonText}>{expanded ? 'Collapse' : 'Expand'}</Text>
       </TouchableOpacity>
 
       {expanded && (
         <View style={styles.details}>
-          <Text style={styles.detailLine}>Sprzęt: {item.equipment}</Text>
-          <Text style={styles.detailLine}>Typ: {item.type} • Poziom: {item.difficulty}</Text>
+          <Text style={styles.detailLine}>Equipment: {item.equipment}</Text>
+          <Text style={styles.detailLine}>Type: {item.type} • Level: {item.difficulty}</Text>
 
-          <Text style={styles.subheading}>Instrukcje:</Text>
+          <TouchableOpacity onPress={() => {navigation.navigate('Muscle Map', { exercises: [item] });}}>
+            <Text style={styles.subheading}>Check Muscle Load</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.subheading}>Instructions:</Text>
           {item.instructions.map((inst, i) => (
             <Text key={i} style={styles.instructionLine}>{i + 1}. {inst}</Text>
           ))}
 
           {item.video ? (
-            <Text style={styles.videoLink}>Wideo: {item.video}</Text>
+            <Text style={styles.videoLink}>Video: {item.video}</Text>
           ) : null}
         </View>
       )}

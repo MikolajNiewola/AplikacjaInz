@@ -2,14 +2,28 @@ import React, { useState } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import Front from '../Components/MuscleMap/Front.jsx';
 import Rear from '../Components/MuscleMap/Rear.jsx';
+import baza from '../baza.json';
+
+const aggregateMuscleLoads = (exercises) => {
+  const aggregated = {};
+
+  exercises.forEach((exercise) => {
+    baza.exercises[exercise.id].muscle_group.forEach(({ name, load }) => {
+      aggregated[name] = (aggregated[name] || 0) + (load || 0);
+    });
+  });
+
+  return aggregated;
+};
 
 const MuscleMap = ({ route })  => {
   const [view, setView] = useState('front');
   const toggleView = () => {
     view === 'front' ? setView('rear') : setView('front');
   }
-    
-  const muscleLoads = route.params.muscleLoads;
+
+  const exercisesParam = route.params.exercises;
+  const muscleLoads = aggregateMuscleLoads(exercisesParam);
 
   return (
     <View style={styles.container}>

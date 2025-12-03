@@ -39,7 +39,6 @@ const CreatePlan = () => {
       id: getLastId(),
       name: planName,
       exercises: selectedExercises.map((exercise) => ({
-        // name: exercise.name,
         id: exercise.id,
 
         reps: exercise.reps,
@@ -63,6 +62,10 @@ const CreatePlan = () => {
       <TextInput placeholder="Plan Name" value={planName} onChangeText={setPlanName} />
 
       {/* ============================================= */}
+
+      <TouchableOpacity onPress={() => {navigation.navigate('Muscle Map', { exercises: selectedExercises });}}>
+        <Text>Check Muscle Load</Text>
+      </TouchableOpacity>
       
       <Text>Selected Exercises:</Text>
       <ScrollView style={{ height: 200 }}>
