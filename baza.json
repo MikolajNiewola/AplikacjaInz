@@ -1,75 +1,1492 @@
 {
-    "exercises":[
+  "exercises": [
+    {
+      "id": 0,
+      "name": "Wyciskanie sztangi leżąc",
+      "muscle_group": [
         {
-            "id": 0,
-            "name":"Wyciskanie sztangi leżąc",
-            "muscle_group":
-            [
-                {"name":"piersiowy", "load":9},
-                {"name":"triceps", "load":3},
-                {"name":"biceps", "load":1},
-                {"name":"gornybrzucha", "load":2},
-                {"name":"plecy", "load":3}
-            ],
-            "equipment":"sztanga, ławka",
-            "type":"siłowy",
-            "difficulty":"średni",
-            "instructions":
-            [
-                "Połóż się na ławce płaskiej, stopy na podłodze.",
-                "Chwyć sztangę nieco szerzej niż szerokość barków.",
-                "Opuść sztangę kontrolowanym ruchem do klatki piersiowej.",
-                "Wypchnij sztangę z powrotem do pozycji wyjściowej, prostując ramiona."
-            ],
-            "image":"wyciskanie_sztangi_leżąc.jpg",
-            "video":"https://www.youtube.com/watch?v=pS6FPxGTt6Y"
+          "name": "piersiowy",
+          "load": 10
         },
         {
-            "id": 1,
-            "name":"Przysiady ze sztangą",
-            "muscle_group":
-            [
-                {"name":"czworoglowy", "load":8},
-                {"name":"posladkowy", "load":7},
-                {"name":"gornybrzucha", "load":4},
-                {"name":"plecy", "load":3}
-            ],
-            "equipment":"sztanga",
-            "type":"siłowy",
-            "difficulty":"trudny",
-            "instructions":
-            [
-                "Ustaw sztangę na górnej części pleców, stopy na szerokość barków.",
-                "Zegnij kolana i opuść ciało w dół, jakbyś siadał na krześle.",
-                "Utrzymaj plecy proste i kolana nad stopami.",
-                "Wróć do pozycji wyjściowej, prostując nogi."
-            ],
-            "image":"przysiady_ze_sztangą.jpg",
-            "video":"url_do_filmu"
+          "name": "triceps",
+          "load": 5
         },
         {
-            "id": 2,
-            "name":"Martwy ciąg",
-            "muscle_group":
-            [
-                {"name":"plecy", "load":9},
-                {"name":"czworoglowy", "load":7},
-                {"name":"posladkowy", "load":6},
-                {"name":"gornybrzucha", "load":4},
-                {"name":"naramienny", "load":3}
-            ],
-            "equipment":"sztanga",
-            "type":"siłowy",
-            "difficulty":"trudny",
-            "instructions":
-            [
-                "Stań prosto ze stopami na szerokość bioder, sztanga przed tobą.",
-                "Zegnij biodra i kolana, chwyć sztangę na szerokość barków.",
-                "Utrzymując plecy proste, unieś sztangę, prostując nogi i biodra.",
-                "Opuść sztangę kontrolowanym ruchem z powrotem na podłogę."
-            ],
-            "image":"martwy_ciag.jpg",
-            "video":"url_do_filmu"
+          "name": "naramienny",
+          "load": 3
+        },
+        {
+          "name": "gornybrzucha",
+          "load": 2
         }
-    ]
+      ],
+      "equipment": "sztanga, ławka",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Połóż się na ławce płaskiej, stopy na podłodze.",
+        "Chwyć sztangę nieco szerzej niż szerokość barków.",
+        "Opuść sztangę kontrolowanym ruchem do klatki piersiowej.",
+        "Wypchnij sztangę z powrotem do pozycji wyjściowej, prostując ramiona."
+      ],
+      "image": "wyciskanie_sztangi_lezac.jpg",
+      "video": ""
+    },
+    {
+      "id": 1,
+      "name": "Przysiady ze sztangą",
+      "muscle_group": [
+        {
+          "name": "czworoglowy",
+          "load": 10
+        },
+        {
+          "name": "posladkowy",
+          "load": 8
+        },
+        {
+          "name": "gornybrzucha",
+          "load": 3
+        },
+        {
+          "name": "czworoboczny",
+          "load": 2
+        }
+      ],
+      "equipment": "sztanga",
+      "type": "siłowy",
+      "difficulty": "trudny",
+      "instructions": [
+        "Ustaw sztangę na górnej części pleców.",
+        "Zegnij kolana i opuść biodra w dół.",
+        "Utrzymaj proste plecy i stabilny brzuch.",
+        "Wróć do pozycji stojącej."
+      ],
+      "image": "przysiady_ze_sztanga.jpg",
+      "video": ""
+    },
+    {
+      "id": 2,
+      "name": "Martwy ciąg klasyczny",
+      "muscle_group": [
+        {
+          "name": "najszerszy",
+          "load": 4
+        },
+        {
+          "name": "czworoboczny",
+          "load": 4
+        },
+        {
+          "name": "posladkowy",
+          "load": 7
+        },
+        {
+          "name": "dwuglowy",
+          "load": 6
+        },
+        {
+          "name": "czworoglowy",
+          "load": 4
+        },
+        {
+          "name": "przedramiona",
+          "load": 3
+        }
+      ],
+      "equipment": "sztanga",
+      "type": "siłowy",
+      "difficulty": "trudny",
+      "instructions": [
+        "Stań ze stopami na szerokość bioder, sztanga nad środkiem stóp.",
+        "Zegnij biodra i kolana, złap sztangę na szerokość barków.",
+        "Utrzymując napięty brzuch, wyprostuj biodra i kolana unosząc sztangę.",
+        "Kontrolowanie opuść sztangę na podłogę."
+      ],
+      "image": "martwy_ciag_klasyczny.jpg",
+      "video": ""
+    },
+    {
+      "id": 3,
+      "name": "Unoszenie łydek stojąc",
+      "muscle_group": [
+        {
+          "name": "lydki",
+          "load": 10
+        }
+      ],
+      "equipment": "maszyna do łydek lub sztanga/hantle",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Stań na podwyższeniu palcami stóp.",
+        "Unieś pięty maksymalnie w górę.",
+        "Powoli opuść pięty poniżej poziomu palców."
+      ],
+      "image": "unoszenie_lydek_stojac.jpg",
+      "video": ""
+    },
+    {
+      "id": 4,
+      "name": "Unoszenie łydek siedząc",
+      "muscle_group": [
+        {
+          "name": "lydki",
+          "load": 9
+        }
+      ],
+      "equipment": "maszyna do łydek siedząc lub sztanga na kolanach",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź, oprzyj przednią część stóp na podwyższeniu.",
+        "Opuść pięty w dół.",
+        "Unieś pięty jak najwyżej, mocno napinając łydki."
+      ],
+      "image": "unoszenie_lydek_siedzac.jpg",
+      "video": ""
+    },
+    {
+      "id": 5,
+      "name": "Skakanka",
+      "muscle_group": [
+        {
+          "name": "lydki",
+          "load": 7
+        }
+      ],
+      "equipment": "skakanka",
+      "type": "kardio",
+      "difficulty": "średni",
+      "instructions": [
+        "Skacz rytmicznie na palcach stóp.",
+        "Utrzymuj niskie, szybkie podskoki.",
+        "Oddychaj równomiernie."
+      ],
+      "image": "skakanka.jpg",
+      "video": ""
+    },
+    {
+      "id": 6,
+      "name": "Zginanie grzbietowe stopy z gumą",
+      "muscle_group": [
+        {
+          "name": "piszczelowy",
+          "load": 10
+        }
+      ],
+      "equipment": "guma oporowa",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź z wyprostowaną nogą, zaczep gumę o stopę.",
+        "Przyciągaj palce stopy do siebie przeciwko oporowi.",
+        "Wróć powoli do pozycji wyjściowej."
+      ],
+      "image": "zginanie_stopy_guma.jpg",
+      "video": ""
+    },
+    {
+      "id": 7,
+      "name": "Chodzenie na piętach",
+      "muscle_group": [
+        {
+          "name": "piszczelowy",
+          "load": 8
+        }
+      ],
+      "equipment": "brak",
+      "type": "funkcjonalny",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Idź do przodu opierając się wyłącznie na piętach.",
+        "Utrzymuj palce uniesione do góry.",
+        "Zachowaj wyprostowaną sylwetkę."
+      ],
+      "image": "chodzenie_na_pietach.jpg",
+      "video": ""
+    },
+    {
+      "id": 8,
+      "name": "Podciąganie palców stóp stojąc przy ścianie",
+      "muscle_group": [
+        {
+          "name": "piszczelowy",
+          "load": 9
+        }
+      ],
+      "equipment": "brak",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Stań plecami przy ścianie.",
+        "Unieś palce stóp jak najwyżej, pięty zostaw na ziemi.",
+        "Powoli opuść palce."
+      ],
+      "image": "podciaganie_palcow_sciana.jpg",
+      "video": ""
+    },
+    {
+      "id": 9,
+      "name": "Hip thrust ze sztangą",
+      "muscle_group": [
+        {
+          "name": "posladkowy",
+          "load": 10
+        }
+      ],
+      "equipment": "ławeczka, sztanga",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Oprzyj górną część pleców na ławce, stopy na podłodze.",
+        "Trzymaj sztangę na biodrach.",
+        "Unieś biodra do pełnego wyprostu, napinając pośladki.",
+        "Kontrolowanie opuść biodra."
+      ],
+      "image": "hip_thrust.jpg",
+      "video": ""
+    },
+    {
+      "id": 10,
+      "name": "Wykroki chodzone",
+      "muscle_group": [
+        {
+          "name": "posladkowy",
+          "load": 8
+        },
+        {
+          "name": "czworoglowy",
+          "load": 7
+        }
+      ],
+      "equipment": "hantle (opcjonalnie)",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Zrób krok do przodu i ugnij kolana do kąta prostego.",
+        "Odepchnij się z tylnej nogi, przechodząc do kolejnego wykroku.",
+        "Utrzymuj stabilny tułów."
+      ],
+      "image": "wykroki_chodzone.jpg",
+      "video": ""
+    },
+    {
+      "id": 11,
+      "name": "Most biodrowy na jednej nodze",
+      "muscle_group": [
+        {
+          "name": "posladkowy",
+          "load": 9
+        }
+      ],
+      "equipment": "brak",
+      "type": "kalistenika",
+      "difficulty": "średni",
+      "instructions": [
+        "Połóż się na plecach, jedną stopę oprzyj na podłodze, drugą wyprostuj.",
+        "Unieś biodra do góry, napinając pośladek nogi podporowej.",
+        "Powoli opuść biodra, nie odkładając całkiem na ziemię."
+      ],
+      "image": "most_biodrowy_jedna_noga.jpg",
+      "video": ""
+    },
+    {
+      "id": 12,
+      "name": "Przysiad przedni ze sztangą",
+      "muscle_group": [
+        {
+          "name": "czworoglowy",
+          "load": 10
+        },
+        {
+          "name": "posladkowy",
+          "load": 6
+        }
+      ],
+      "equipment": "sztanga",
+      "type": "siłowy",
+      "difficulty": "trudny",
+      "instructions": [
+        "Ułóż sztangę na przedniej części barków.",
+        "Zejdź do przysiadu utrzymując wyprostowany tułów.",
+        "Wróć do góry, prowadząc kolana w linii z palcami."
+      ],
+      "image": "przysiad_przedni.jpg",
+      "video": ""
+    },
+    {
+      "id": 13,
+      "name": "Przysiad bułgarski",
+      "muscle_group": [
+        {
+          "name": "czworoglowy",
+          "load": 9
+        },
+        {
+          "name": "posladkowy",
+          "load": 7
+        }
+      ],
+      "equipment": "ławka, hantle (opcjonalnie)",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Ustaw tylną stopę na ławce za sobą.",
+        "Ugnij przednie kolano, opuszczając biodra w dół.",
+        "Wróć do pozycji startowej na tej samej nodze."
+      ],
+      "image": "przysiad_bulgarski.jpg",
+      "video": ""
+    },
+    {
+      "id": 14,
+      "name": "Prostowanie nóg na maszynie",
+      "muscle_group": [
+        {
+          "name": "czworoglowy",
+          "load": 10
+        }
+      ],
+      "equipment": "maszyna do prostowania nóg",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź na maszynie, stopy pod rolką.",
+        "Wyprostuj nogi do końca, napinając uda.",
+        "Powoli opuść ciężar."
+      ],
+      "image": "prostowanie_nog_maszyna.jpg",
+      "video": ""
+    },
+    {
+      "id": 15,
+      "name": "Uginanie nóg leżąc",
+      "muscle_group": [
+        {
+          "name": "dwuglowy",
+          "load": 10
+        }
+      ],
+      "equipment": "maszyna do uginania nóg",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Połóż się na brzuchu na maszynie.",
+        "Zegnij nogi w kolanach, przyciągając rolkę do pośladków.",
+        "Powoli wyprostuj nogi."
+      ],
+      "image": "uginanie_nog_lezac.jpg",
+      "video": ""
+    },
+    {
+      "id": 16,
+      "name": "Martwy ciąg na prostych nogach",
+      "muscle_group": [
+        {
+          "name": "dwuglowy",
+          "load": 9
+        },
+        {
+          "name": "posladkowy",
+          "load": 7
+        }
+      ],
+      "equipment": "sztanga lub hantle",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań z prostymi lub lekko ugiętymi kolanami.",
+        "Pochyl tułów w przód, prowadząc ciężar wzdłuż nóg.",
+        "Wróć do wyprostu, napinając dwugłowe i pośladki."
+      ],
+      "image": "martwy_ciag_proste_nogi.jpg",
+      "video": ""
+    },
+    {
+      "id": 17,
+      "name": "GHD raise",
+      "muscle_group": [
+        {
+          "name": "dwuglowy",
+          "load": 9
+        },
+        {
+          "name": "posladkowy",
+          "load": 6
+        }
+      ],
+      "equipment": "ławką GHD lub podobne oparcie",
+      "type": "siłowy",
+      "difficulty": "trudny",
+      "instructions": [
+        "Ustaw uda na podparciu, stopy zablokowane.",
+        "Opuszczaj tułów w dół z wyprostowanymi plecami.",
+        "Unoś tułów z powrotem, napinając tył uda."
+      ],
+      "image": "ghd_raise.jpg",
+      "video": ""
+    },
+    {
+      "id": 18,
+      "name": "Przysiady sumo",
+      "muscle_group": [
+        {
+          "name": "krawiecki",
+          "load": 8
+        },
+        {
+          "name": "przywodziciel",
+          "load": 8
+        },
+        {
+          "name": "posladkowy",
+          "load": 6
+        }
+      ],
+      "equipment": "hantel lub sztanga (opcjonalnie)",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań szeroko, palce skierowane na zewnątrz.",
+        "Zejdź do przysiadu, utrzymując kolana nad stopami.",
+        "Wróć do pozycji stojącej."
+      ],
+      "image": "przysiad_sumo.jpg",
+      "video": ""
+    },
+    {
+      "id": 19,
+      "name": "Wykroki boczne",
+      "muscle_group": [
+        {
+          "name": "krawiecki",
+          "load": 7
+        },
+        {
+          "name": "przywodziciel",
+          "load": 7
+        }
+      ],
+      "equipment": "brak lub hantle",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań prosto, zrób duży krok w bok.",
+        "Ugnij kolano nogi wykrocznej, druga noga prosta.",
+        "Odepchnij się i wróć do środka."
+      ],
+      "image": "wykroki_boczne.jpg",
+      "video": ""
+    },
+    {
+      "id": 20,
+      "name": "Motylki siedząc (stretch krawieckiego)",
+      "muscle_group": [
+        {
+          "name": "krawiecki",
+          "load": 5
+        },
+        {
+          "name": "przywodziciel",
+          "load": 5
+        }
+      ],
+      "equipment": "brak",
+      "type": "mobilność",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź, złącz stopy podeszwami do siebie.",
+        "Przyciągnij stopy bliżej bioder.",
+        "Delikatnie dociskaj kolana w dół."
+      ],
+      "image": "motylki_siedzac.jpg",
+      "video": ""
+    },
+    {
+      "id": 21,
+      "name": "Przywodzenie nóg na maszynie",
+      "muscle_group": [
+        {
+          "name": "przywodziciel",
+          "load": 10
+        }
+      ],
+      "equipment": "maszyna do przywodzenia",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź na maszynie z nogami na podkładkach.",
+        "Zbliżaj nogi do siebie przeciwko oporowi.",
+        "Wróć kontrolowanie do pozycji wyjściowej."
+      ],
+      "image": "przywodzenie_nog_maszyna.jpg",
+      "video": ""
+    },
+    {
+      "id": 22,
+      "name": "Ślizgi boczne na dyskach",
+      "muscle_group": [
+        {
+          "name": "przywodziciel",
+          "load": 8
+        }
+      ],
+      "equipment": "ślizgacze lub ręczniki pod stopy",
+      "type": "funkcjonalny",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań na ślizgaczach.",
+        "Rozsuń nogi na boki kontrolowanym ruchem.",
+        "Przywiedź nogi z powrotem do środka."
+      ],
+      "image": "slizgi_boczne.jpg",
+      "video": ""
+    },
+    {
+      "id": 23,
+      "name": "Plank z przywodzeniem nogi",
+      "muscle_group": [
+        {
+          "name": "przywodziciel",
+          "load": 7
+        },
+        {
+          "name": "skosny",
+          "load": 5
+        }
+      ],
+      "equipment": "brak",
+      "type": "izometryczny",
+      "difficulty": "średni",
+      "instructions": [
+        "Ustaw się w pozycji deski na przedramionach.",
+        "Przesuń jedną stopę na zewnątrz, dotykając ziemi.",
+        "Przywieź nogę z powrotem do środka i zmień stronę."
+      ],
+      "image": "plank_przywodzenie_nogi.jpg",
+      "video": ""
+    },
+    {
+      "id": 24,
+      "name": "Russian twist z piłką",
+      "muscle_group": [
+        {
+          "name": "skosny",
+          "load": 10
+        },
+        {
+          "name": "gornybrzucha",
+          "load": 5
+        }
+      ],
+      "equipment": "piłka lekarska lub hantel",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Usiądź, lekko odchyl tułów do tyłu, stopy nad ziemią lub oparte.",
+        "Trzymaj ciężar przed klatką piersiową.",
+        "Rotuj tułów w jedną i drugą stronę."
+      ],
+      "image": "russian_twist.jpg",
+      "video": ""
+    },
+    {
+      "id": 25,
+      "name": "Deska boczna",
+      "muscle_group": [
+        {
+          "name": "skosny",
+          "load": 9
+        }
+      ],
+      "equipment": "brak",
+      "type": "izometryczny",
+      "difficulty": "średni",
+      "instructions": [
+        "Ustaw się bokiem na przedramieniu i boku stopy.",
+        "Utrzymuj ciało w linii prostej.",
+        "Trzymaj pozycję przez zadany czas."
+      ],
+      "image": "deska_boczna.jpg",
+      "video": ""
+    },
+    {
+      "id": 26,
+      "name": "Skręty tułowia na wyciągu",
+      "muscle_group": [
+        {
+          "name": "skosny",
+          "load": 9
+        }
+      ],
+      "equipment": "wyciąg",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań bokiem do wyciągu, trzymaj rączkę oburącz.",
+        "Przeciągnij rączkę po łuku przed sobą, rotując tułów.",
+        "Wróć kontrolowanie do pozycji startowej."
+      ],
+      "image": "skrety_wyciag.jpg",
+      "video": ""
+    },
+    {
+      "id": 27,
+      "name": "Pompki plus (serratus push-up)",
+      "muscle_group": [
+        {
+          "name": "zebaty",
+          "load": 10
+        },
+        {
+          "name": "piersiowy",
+          "load": 5
+        }
+      ],
+      "equipment": "brak",
+      "type": "kalistenika",
+      "difficulty": "średni",
+      "instructions": [
+        "Przyjmij pozycję pompki.",
+        "Z wyprostowanymi łokciami wypchnij klatkę od podłogi, zaokrąglając górne plecy.",
+        "Wróć do pozycji wyjściowej, zbliżając łopatki."
+      ],
+      "image": "pompki_plus.jpg",
+      "video": ""
+    },
+    {
+      "id": 28,
+      "name": "Zgięcia ramion w podporze na ścianie",
+      "muscle_group": [
+        {
+          "name": "zebaty",
+          "load": 8
+        }
+      ],
+      "equipment": "ściana",
+      "type": "kalistenika",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Oprzyj dłonie o ścianę na wysokości klatki.",
+        "Wypchnij klatkę od ściany, rozsuwając łopatki.",
+        "Przyciągnij klatkę do ściany, zbliżając łopatki."
+      ],
+      "image": "scap_push_wall.jpg",
+      "video": ""
+    },
+    {
+      "id": 29,
+      "name": "Unoszenia ramion w leżeniu na boku",
+      "muscle_group": [
+        {
+          "name": "zebaty",
+          "load": 7
+        }
+      ],
+      "equipment": "mały hantel lub brak",
+      "type": "rehabilitacja",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Połóż się na boku, ramię górne zgięte w łokciu przed sobą.",
+        "Unieś łokieć i łopatkę od podłoża, napinając okolice pachy.",
+        "Powoli wróć do pozycji wyjściowej."
+      ],
+      "image": "zebaty_lezenie_bok.jpg",
+      "video": ""
+    },
+    {
+      "id": 30,
+      "name": "Zginanie nadgarstków ze sztangą",
+      "muscle_group": [
+        {
+          "name": "przedramiona",
+          "load": 10
+        }
+      ],
+      "equipment": "sztanga",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź, oprzyj przedramiona na udach, dłonie nad kolanami.",
+        "Trzymaj sztangę podchwytem.",
+        "Zginaj nadgarstki w górę i opuszczaj w dół."
+      ],
+      "image": "zginanie_nadgarstkow.jpg",
+      "video": ""
+    },
+    {
+      "id": 31,
+      "name": "Prostowanie nadgarstków z hantlami",
+      "muscle_group": [
+        {
+          "name": "przedramiona",
+          "load": 9
+        }
+      ],
+      "equipment": "hantle",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Oprzyj przedramiona na ławce, dłonie zwisają grzbietem w dół.",
+        "Trzymaj hantle nachwytem.",
+        "Prostuj nadgarstki w górę i opuszczaj."
+      ],
+      "image": "prostowanie_nadgarstkow.jpg",
+      "video": ""
+    },
+    {
+      "id": 32,
+      "name": "Farmer walk",
+      "muscle_group": [
+        {
+          "name": "przedramiona",
+          "load": 8
+        },
+        {
+          "name": "czworoboczny",
+          "load": 5
+        }
+      ],
+      "equipment": "ciężkie hantle lub kettlebells",
+      "type": "funkcjonalny",
+      "difficulty": "średni",
+      "instructions": [
+        "Chwyć ciężary w obie ręce.",
+        "Idź prosto utrzymując napięty chwyt i stabilną postawę.",
+        "Oddychaj spokojnie, nie bujając tułowiem."
+      ],
+      "image": "farmer_walk.jpg",
+      "video": ""
+    },
+    {
+      "id": 33,
+      "name": "Wyciskanie hantli nad głowę",
+      "muscle_group": [
+        {
+          "name": "naramienny",
+          "load": 10
+        },
+        {
+          "name": "triceps",
+          "load": 5
+        }
+      ],
+      "equipment": "hantle",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Usiądź lub stań prosto z hantlami na wysokości barków.",
+        "Wyciskaj hantle nad głowę do pełnego wyprostu.",
+        "Kontrolowanie opuść hantle."
+      ],
+      "image": "wyciskanie_hantli_glowa.jpg",
+      "video": ""
+    },
+    {
+      "id": 34,
+      "name": "Unoszenie hantli bokiem",
+      "muscle_group": [
+        {
+          "name": "naramienny",
+          "load": 9
+        }
+      ],
+      "equipment": "hantle",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań prosto, trzymaj hantle po bokach.",
+        "Unieś ramiona w bok do wysokości barków.",
+        "Powoli opuść ramiona."
+      ],
+      "image": "unoszenie_bokiem.jpg",
+      "video": ""
+    },
+    {
+      "id": 35,
+      "name": "Face pull na wyciągu",
+      "muscle_group": [
+        {
+          "name": "naramienny",
+          "load": 8
+        },
+        {
+          "name": "czworoboczny",
+          "load": 6
+        }
+      ],
+      "equipment": "wyciąg, lina",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Ustaw linę na wysokości twarzy.",
+        "Przeciągnij linę w stronę twarzy, rozciągając dłonie na zewnątrz.",
+        "Ściągnij łopatki do siebie."
+      ],
+      "image": "face_pull.jpg",
+      "video": ""
+    },
+    {
+      "id": 36,
+      "name": "Uginanie ramion ze sztangą",
+      "muscle_group": [
+        {
+          "name": "biceps",
+          "load": 10
+        },
+        {
+          "name": "przedramiona",
+          "load": 3
+        }
+      ],
+      "equipment": "sztanga",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań prosto, trzymaj sztangę podchwytem.",
+        "Zginaj łokcie, unosząc sztangę do klatki.",
+        "Powoli opuszczaj sztangę."
+      ],
+      "image": "uginanie_sztanga.jpg",
+      "video": ""
+    },
+    {
+      "id": 37,
+      "name": "Uginanie ramion z hantlami supinowane",
+      "muscle_group": [
+        {
+          "name": "biceps",
+          "load": 9
+        }
+      ],
+      "equipment": "hantle",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań prosto z hantlami w dłoniach.",
+        "Podczas zginania ramion odwracaj nadgarstki do góry.",
+        "Kontroluj ruch w dół."
+      ],
+      "image": "uginanie_hantle_supinacja.jpg",
+      "video": ""
+    },
+    {
+      "id": 38,
+      "name": "Uginanie na modlitewniku",
+      "muscle_group": [
+        {
+          "name": "biceps",
+          "load": 10
+        }
+      ],
+      "equipment": "modlitewnik, sztanga lub hantel",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Oprzyj ramiona na modlitewniku.",
+        "Zginaj łokcie, unosząc ciężar.",
+        "Powoli opuszczaj do pełnego rozciągnięcia."
+      ],
+      "image": "uginanie_modlitewnik.jpg",
+      "video": ""
+    },
+    {
+      "id": 39,
+      "name": "Prostowanie ramion na wyciągu",
+      "muscle_group": [
+        {
+          "name": "triceps",
+          "load": 10
+        }
+      ],
+      "equipment": "wyciąg",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Stań przy wyciągu, trzymaj rączkę nachwytem.",
+        "Prostuj łokcie w dół do pełnego wyprostu.",
+        "Powoli ugnij łokcie, wracając do pozycji startowej."
+      ],
+      "image": "prostowanie_wyciag.jpg",
+      "video": ""
+    },
+    {
+      "id": 40,
+      "name": "Wyciskanie francuskie leżąc",
+      "muscle_group": [
+        {
+          "name": "triceps",
+          "load": 9
+        }
+      ],
+      "equipment": "sztanga łamana lub hantle",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Połóż się na ławce, trzymaj ciężar nad klatką.",
+        "Ugnij łokcie, opuszczając ciężar w kierunku czoła.",
+        "Wyprostuj łokcie, wracając do pozycji startowej."
+      ],
+      "image": "wyciskanie_francuskie.jpg",
+      "video": ""
+    },
+    {
+      "id": 41,
+      "name": "Pompki w podporze tyłem",
+      "muscle_group": [
+        {
+          "name": "triceps",
+          "load": 8
+        }
+      ],
+      "equipment": "ławka lub box",
+      "type": "kalistenika",
+      "difficulty": "średni",
+      "instructions": [
+        "Oprzyj dłonie za sobą na ławce, nogi wyprostowane.",
+        "Ugnij łokcie, opuszczając biodra w dół.",
+        "Wypchnij się, prostując ramiona."
+      ],
+      "image": "pompki_tylem.jpg",
+      "video": ""
+    },
+    {
+      "id": 42,
+      "name": "Brzuszki klasyczne",
+      "muscle_group": [
+        {
+          "name": "gornybrzucha",
+          "load": 10
+        },
+        {
+          "name": "skosny",
+          "load": 4
+        }
+      ],
+      "equipment": "brak",
+      "type": "kalistenika",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Połóż się na plecach, kolana ugięte.",
+        "Unieś górną część tułowia w kierunku kolan.",
+        "Powoli opuść się z powrotem."
+      ],
+      "image": "brzuszki_klasyczne.jpg",
+      "video": ""
+    },
+    {
+      "id": 43,
+      "name": "Unoszenie nóg w zwisie",
+      "muscle_group": [
+        {
+          "name": "dolnybrzucha",
+          "load": 10
+        },
+        {
+          "name": "gornybrzucha",
+          "load": 5
+        }
+      ],
+      "equipment": "drążek",
+      "type": "kalistenika",
+      "difficulty": "trudny",
+      "instructions": [
+        "Zawiśnij na drążku.",
+        "Unieś nogi złączone w górę, utrzymując je proste lub lekko ugięte.",
+        "Kontrolowanie opuść nogi."
+      ],
+      "image": "unoszenie_nog_zwis.jpg",
+      "video": ""
+    },
+    {
+      "id": 44,
+      "name": "Reverse crunch na ławce",
+      "muscle_group": [
+        {
+          "name": "dolnybrzucha",
+          "load": 9
+        }
+      ],
+      "equipment": "ławka",
+      "type": "kalistenika",
+      "difficulty": "średni",
+      "instructions": [
+        "Połóż się na ławce, chwyć górną krawędź.",
+        "Przyciągnij kolana do klatki piersiowej, unosząc biodra.",
+        "Powoli opuść biodra."
+      ],
+      "image": "reverse_crunch.jpg",
+      "video": ""
+    },
+    {
+      "id": 45,
+      "name": "Pompki klasyczne",
+      "muscle_group": [
+        {
+          "name": "piersiowy",
+          "load": 9
+        },
+        {
+          "name": "triceps",
+          "load": 5
+        },
+        {
+          "name": "naramienny",
+          "load": 3
+        }
+      ],
+      "equipment": "brak",
+      "type": "kalistenika",
+      "difficulty": "średni",
+      "instructions": [
+        "Przyjmij pozycję podporu przodem na dłoniach.",
+        "Ugnij łokcie, opuszczając klatkę w stronę podłogi.",
+        "Wypchnij się do pełnego wyprostu."
+      ],
+      "image": "pompki_klasyczne.jpg",
+      "video": ""
+    },
+    {
+      "id": 46,
+      "name": "Rozpiętki z hantlami na ławce",
+      "muscle_group": [
+        {
+          "name": "piersiowy",
+          "load": 10
+        }
+      ],
+      "equipment": "hantle, ławka",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Połóż się na ławce z hantlami nad klatką.",
+        "Opuszczaj ramiona szerokim łukiem na boki.",
+        "Zbliżaj hantle z powrotem nad klatkę."
+      ],
+      "image": "rozpietki_hantle.jpg",
+      "video": ""
+    },
+    {
+      "id": 47,
+      "name": "Wyciskanie hantli na skosie dodatnim",
+      "muscle_group": [
+        {
+          "name": "piersiowy",
+          "load": 9
+        },
+        {
+          "name": "naramienny",
+          "load": 4
+        }
+      ],
+      "equipment": "ławka skośna, hantle",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Ustaw ławkę pod kątem dodatnim.",
+        "Wyciskaj hantle z klatki nad głowę.",
+        "Kontroluj opuszczanie ciężaru."
+      ],
+      "image": "wyciskanie_skos_dodatni.jpg",
+      "video": ""
+    },
+    {
+      "id": 48,
+      "name": "Szrugsy ze sztangą",
+      "muscle_group": [
+        {
+          "name": "czworoboczny",
+          "load": 10
+        }
+      ],
+      "equipment": "sztanga",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Stań prosto, trzymaj sztangę w rękach.",
+        "Unieś barki jak najwyżej do uszu.",
+        "Powoli opuść barki."
+      ],
+      "image": "szrugsy_sztanga.jpg",
+      "video": ""
+    },
+    {
+      "id": 49,
+      "name": "Face pull (górny czworoboczny)",
+      "muscle_group": [
+        {
+          "name": "czworoboczny",
+          "load": 8
+        },
+        {
+          "name": "naramienny",
+          "load": 5
+        }
+      ],
+      "equipment": "wyciąg, lina",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Przeciągnij linę w stronę twarzy.",
+        "Utrzymuj łokcie wysoko.",
+        "Ściągnij łopatki do siebie."
+      ],
+      "image": "face_pull_traps.jpg",
+      "video": ""
+    },
+    {
+      "id": 50,
+      "name": "Wiosłowanie sztangą w opadzie",
+      "muscle_group": [
+        {
+          "name": "czworoboczny",
+          "load": 7
+        },
+        {
+          "name": "najszerszy",
+          "load": 7
+        }
+      ],
+      "equipment": "sztanga",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Pochyl tułów do przodu, trzymaj sztangę w dłoniach.",
+        "Przyciągnij sztangę do brzucha.",
+        "Kontrolowanie opuść sztangę."
+      ],
+      "image": "wioslowanie_sztanga.jpg",
+      "video": ""
+    },
+    {
+      "id": 51,
+      "name": "Podciąganie nachwytem",
+      "muscle_group": [
+        {
+          "name": "najszerszy",
+          "load": 10
+        },
+        {
+          "name": "biceps",
+          "load": 5
+        }
+      ],
+      "equipment": "drążek",
+      "type": "kalistenika",
+      "difficulty": "trudny",
+      "instructions": [
+        "Zawiśnij na drążku nachwytem.",
+        "Podciągnij się, aż broda znajdzie się nad drążkiem.",
+        "Kontrolowanie opuść się do pełnego zwisu."
+      ],
+      "image": "podciaganie_nachwyt.jpg",
+      "video": ""
+    },
+    {
+      "id": 52,
+      "name": "Ściąganie drążka wyciągu do klatki",
+      "muscle_group": [
+        {
+          "name": "najszerszy",
+          "load": 9
+        }
+      ],
+      "equipment": "wyciąg górny",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź, złap drążek szerokim chwytem.",
+        "Ściągnij drążek do górnej części klatki.",
+        "Powoli wyprostuj ramiona."
+      ],
+      "image": "sciaganie_wyciag_klatka.jpg",
+      "video": ""
+    },
+    {
+      "id": 53,
+      "name": "Wiosłowanie na maszynie",
+      "muscle_group": [
+        {
+          "name": "najszerszy",
+          "load": 8
+        },
+        {
+          "name": "czworoboczny",
+          "load": 6
+        }
+      ],
+      "equipment": "maszyna do wiosłowania",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź na maszynie, złap uchwyty.",
+        "Przyciągnij uchwyty do tułowia, ściągając łopatki.",
+        "Powoli wyprostuj ramiona."
+      ],
+      "image": "wioslowanie_maszyna.jpg",
+      "video": ""
+    },
+    {
+      "id": 54,
+      "name": "Rotacje zewnętrzne barku w leżeniu",
+      "muscle_group": [
+        {
+          "name": "podgrzebieniowy",
+          "load": 9
+        }
+      ],
+      "equipment": "lekki hantel",
+      "type": "rehabilitacja",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Połóż się na boku, łokieć zgięty 90 stopni przy tułowiu.",
+        "Rotuj ramię na zewnątrz unosząc hantel.",
+        "Powoli wróć do pozycji startowej."
+      ],
+      "image": "rotacja_zew_lezenie.jpg",
+      "video": ""
+    },
+    {
+      "id": 55,
+      "name": "Rotacje zewnętrzne przy wyciągu",
+      "muscle_group": [
+        {
+          "name": "podgrzebieniowy",
+          "load": 8
+        }
+      ],
+      "equipment": "wyciąg dolny",
+      "type": "rehabilitacja",
+      "difficulty": "średni",
+      "instructions": [
+        "Stań bokiem do wyciągu, łokieć przy boku.",
+        "Rotuj przedramię na zewnątrz.",
+        "Kontroluj powrót ruchu."
+      ],
+      "image": "rotacja_zew_wyciag.jpg",
+      "video": ""
+    },
+    {
+      "id": 56,
+      "name": "Face pull z rotacją zewnętrzną",
+      "muscle_group": [
+        {
+          "name": "podgrzebieniowy",
+          "load": 7
+        },
+        {
+          "name": "oble",
+          "load": 5
+        }
+      ],
+      "equipment": "wyciąg, lina",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Przeciągnij linę w stronę twarzy.",
+        "W końcowej fazie obróć dłonie na zewnątrz.",
+        "Utrzymaj łokcie wysoko."
+      ],
+      "image": "face_pull_rotacja.jpg",
+      "video": ""
+    },
+    {
+      "id": 57,
+      "name": "Wiosłowanie hantlem w oparciu",
+      "muscle_group": [
+        {
+          "name": "oble",
+          "load": 8
+        },
+        {
+          "name": "najszerszy",
+          "load": 6
+        }
+      ],
+      "equipment": "hantel, ławka",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Oprzyj jedną rękę i kolano na ławce.",
+        "Drugą ręką wiosłuj hantlem do biodra.",
+        "Kontroluj ruch w dół."
+      ],
+      "image": "wioslowanie_hantel.jpg",
+      "video": ""
+    },
+    {
+      "id": 58,
+      "name": "Podciąganie w wąskim uchwycie neutralnym",
+      "muscle_group": [
+        {
+          "name": "oble",
+          "load": 7
+        },
+        {
+          "name": "najszerszy",
+          "load": 7
+        }
+      ],
+      "equipment": "drążek z uchwytem neutralnym",
+      "type": "kalistenika",
+      "difficulty": "trudny",
+      "instructions": [
+        "Zawiśnij w uchwycie neutralnym.",
+        "Podciągnij się, kierując klatkę do drążka.",
+        "Powoli opuść ciało."
+      ],
+      "image": "podciaganie_neutral.jpg",
+      "video": ""
+    },
+    {
+      "id": 59,
+      "name": "Pullover z hantlem",
+      "muscle_group": [
+        {
+          "name": "oble",
+          "load": 7
+        },
+        {
+          "name": "piersiowy",
+          "load": 5
+        }
+      ],
+      "equipment": "hantel, ławka",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Połóż się na ławce, trzymaj hantel nad klatką.",
+        "Opuść hantel za głowę po łuku.",
+        "Przyciągnij ciężar z powrotem nad klatkę."
+      ],
+      "image": "pullover_hantel.jpg",
+      "video": ""
+    },
+    {
+      "id": 60,
+      "name": "Wznosy barków z obciążeniem (szyja)",
+      "muscle_group": [
+        {
+          "name": "szyja",
+          "load": 8
+        },
+        {
+          "name": "czworoboczny",
+          "load": 4
+        }
+      ],
+      "equipment": "szelki na szyję lub ręcznik i talerz",
+      "type": "siłowy",
+      "difficulty": "średni",
+      "instructions": [
+        "Załóż obciążenie na tył głowy.",
+        "Powoli przyciągaj brodę do klatki piersiowej.",
+        "Wróć do neutralnej pozycji szyi."
+      ],
+      "image": "wznosy_szyja.jpg",
+      "video": ""
+    },
+    {
+      "id": 61,
+      "name": "Izometryczny mostek szyjny",
+      "muscle_group": [
+        {
+          "name": "szyja",
+          "load": 9
+        }
+      ],
+      "equipment": "mata",
+      "type": "izometryczny",
+      "difficulty": "trudny",
+      "instructions": [
+        "Połóż się na plecach, oprzyj tył głowy o podłoże.",
+        "Unieś biodra, dociskając głowę do podłoża.",
+        "Utrzymaj napięcie przez zadany czas."
+      ],
+      "image": "mostek_szyjny.jpg",
+      "video": ""
+    },
+    {
+      "id": 62,
+      "name": "Przyciąganie głowy do ręcznika (izometria)",
+      "muscle_group": [
+        {
+          "name": "szyja",
+          "load": 7
+        }
+      ],
+      "equipment": "ręcznik",
+      "type": "izometryczny",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Owiń ręcznik wokół czoła lub potylicy.",
+        "Próbuj dociągnąć głowę do ręcznika.",
+        "Stawiaj opór rękami, utrzymując izometryczne napięcie."
+      ],
+      "image": "izometria_szyja_recznik.jpg",
+      "video": ""
+    },
+    {
+      "id": 63,
+      "name": "Skłony głowy w przód siedząc",
+      "muscle_group": [
+        {
+          "name": "mos",
+          "load": 8
+        }
+      ],
+      "equipment": "brak lub mały ciężar",
+      "type": "siłowy",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Usiądź prosto.",
+        "Powoli pochyl głowę w przód, przyciągając brodę do klatki.",
+        "Wróć do pozycji neutralnej."
+      ],
+      "image": "sklony_glowy_przod.jpg",
+      "video": ""
+    },
+    {
+      "id": 64,
+      "name": "Skłony głowy w bok",
+      "muscle_group": [
+        {
+          "name": "mos",
+          "load": 8
+        }
+      ],
+      "equipment": "brak",
+      "type": "mobilność",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Przechyl głowę w bok, przybliżając ucho do barku.",
+        "Wróć do pozycji wyjściowej.",
+        "Powtórz na obie strony."
+      ],
+      "image": "sklony_glowy_bok.jpg",
+      "video": ""
+    },
+    {
+      "id": 65,
+      "name": "Rotacje głowy z oporem ręki",
+      "muscle_group": [
+        {
+          "name": "mos",
+          "load": 7
+        }
+      ],
+      "equipment": "brak",
+      "type": "izometryczny",
+      "difficulty": "łatwy",
+      "instructions": [
+        "Przyłóż dłoń do boku głowy.",
+        "Próbuj obrócić głowę w stronę dłoni, stawiając opór.",
+        "Utrzymaj napięcie, następnie rozluźnij."
+      ],
+      "image": "rotacje_glowy_opor.jpg",
+      "video": ""
+    }
+  ]
 }

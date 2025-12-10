@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import baza from '../../baza.json';
 
@@ -30,6 +30,7 @@ const ViewPlan = ({ route }) => {
             <Text>Sets: {exercise.sets}</Text>
             <Text>Weight: {exercise.weight}</Text>
           </View>
+            
         ))}
       </ScrollView>
     </View>

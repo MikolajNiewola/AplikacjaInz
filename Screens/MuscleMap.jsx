@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
-import Front from '../Components/MuscleMap/Front.jsx';
-import Rear from '../Components/MuscleMap/Rear.jsx';
-import baza from '../baza.json';
+import MuscleMapSVG from '../Components/MuscleMap/MuscleMapSVG.jsx';
+import { frontLayers, rearLayers } from '../Components/MuscleMap/MuscleMapLayers.jsx';
+import baza from '../baza.json'; // do podmiany na AsyncStoarage
 
 const aggregateMuscleLoads = (exercises) => {
   const aggregated = {};
@@ -18,23 +18,19 @@ const aggregateMuscleLoads = (exercises) => {
 
 const MuscleMap = ({ route })  => {
   const [view, setView] = useState('front');
-  const toggleView = () => {
-    view === 'front' ? setView('rear') : setView('front');
-  }
+  const toggleView = () => setView((prev) => (prev === 'front' ? 'rear' : 'front'));
 
   const exercisesParam = route.params.exercises;
   const muscleLoads = aggregateMuscleLoads(exercisesParam);
+  const currentLayers = view === 'front' ? frontLayers : rearLayers;
 
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>
-        {view === 'front' ? <Front muscleLoads={muscleLoads} /> : <Rear muscleLoads={muscleLoads} />}
+        <MuscleMapSVG layers={currentLayers} muscleLoads={muscleLoads} />
       </View>
       <View style={styles.buttonContainer}>
-        <Button
-          title='Rotate'
-          onPress={toggleView}
-        />
+        <Button title='Rotate' onPress={toggleView}/>
       </View>
     </View>
   );
