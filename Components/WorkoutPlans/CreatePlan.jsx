@@ -1,53 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import data from '../../baza.json';
-import AddExercise from './AddExercise';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const CreatePlan = () => {
-  const navigation = useNavigation();
+import data from '../../baza.json';
+import AddExercise from './AddExercise';
 
-  const [planName, setPlanName] = useState('');
-  const [selectedExercises, setSelectedExercises] = useState([]);
+const CreatePlan = ({ route, onSave }) => {
+  const navigation = useNavigation();
+  const { plan } = route.params || {};
+
+  const [planName, setPlanName] = useState(plan?.name || '');
+  const [selectedExercises, setSelectedExercises] = useState(plan?.exercises || []);
   const [availableExercises, setAvailableExercises] = useState(data.exercises);
-  const [workouts, setWorkouts] = useState([]);
 
   const addExerciseToPlan = (exercise) => {
-    setSelectedExercises(prev => [ ...prev, {...exercise, reps: 0, sets: 0, weight: 0} ])
+    setSelectedExercises(prev => [ ...prev, {...exercise, reps: 0, sets: 0} ])
     setAvailableExercises(prev => prev.filter(ex => ex.id !== exercise.id));
   };
 
   const updateExerciseInPlan = (id, fields) => {
-    setSelectedExercises(prev => prev.map(exercise => (exercise.id === id ? { ...exercise, ...fields } : exercise)));
+    setSelectedExercises(prev => prev.map(ex => (ex.id === id ? { ...ex, ...fields } : ex)));
   }
 
-  useEffect(() => {
-    AsyncStorage.getItem('workouts').then((data) => {
-      if (data) {
-        setWorkouts(JSON.parse(data));
-      }
-    });
-  }, []);
-
-  const getLastId = () => {
-    return workouts.length === 0 ? 1 : workouts[workouts.length - 1].id + 1;
+  const getLastId = ( array ) => {
+    return array.length === 0 ? 1 : array[array.length - 1].id + 1;
   };
 
-  const savePlan = () => {
+  const savePlan = async () => {
+    const stored = await AsyncStorage.getItem('workouts');
+    const parsed = stored ? JSON.parse(stored) : [];
+
     const newWorkout = {
-      id: getLastId(),
+      id: plan?.id || getLastId(parsed),
       name: planName,
       exercises: selectedExercises.map((exercise) => ({
         id: exercise.id,
-
+        name: exercise.name,
         reps: exercise.reps,
         sets: exercise.sets,
         weight: exercise.weight,
       })),
     };
 
-    AsyncStorage.setItem('workouts', JSON.stringify([...workouts, newWorkout]));
+    let updatedWorkouts;
+
+    if (plan) {
+      updatedWorkouts = parsed.map(w => w.id === plan.id ? newWorkout : w);
+    } else {
+      updatedWorkouts = [...parsed, newWorkout];
+    }
+
+    AsyncStorage.setItem('workouts', JSON.stringify(updatedWorkouts));
     
     navigation.goBack();
   };
@@ -58,7 +62,7 @@ const CreatePlan = () => {
         <Text>Save Plan</Text>
       </TouchableOpacity>
 
-      <Text>Create New Plan</Text>
+      <Text>{plan ? 'Edit Plan' : 'Create New Plan'}</Text>
       <TextInput placeholder="Plan Name" value={planName} onChangeText={setPlanName} />
 
       {/* ============================================= */}
