@@ -6,13 +6,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import data from '../../baza.json';
 import AddExercise from './AddExercise';
 
-const CreatePlan = ({ route, onSave }) => {
+const CreatePlan = ({ route }) => {
   const navigation = useNavigation();
   const { plan } = route.params || {};
 
   const [planName, setPlanName] = useState(plan?.name || '');
   const [selectedExercises, setSelectedExercises] = useState(plan?.exercises || []);
-  const [availableExercises, setAvailableExercises] = useState(data.exercises);
+  const [availableExercises, setAvailableExercises] = useState(
+    plan?.exercises
+      ? data.exercises.filter(ex => !plan.exercises.some(selected => selected.id === ex.id))
+      : data.exercises
+  );
 
   const addExerciseToPlan = (exercise) => {
     setSelectedExercises(prev => [ ...prev, {...exercise, reps: 0, sets: 0} ])

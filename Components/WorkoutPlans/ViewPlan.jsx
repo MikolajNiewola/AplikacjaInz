@@ -1,14 +1,16 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Touchable } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import baza from '../../baza.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ExerciseCard from './ExerciseCard';
+import baza from '../../baza.json';
 
 const ViewPlan = ({ route }) => {
   const navigation = useNavigation();
   const { plan: initialPlan } = route.params;
 
   const [plan, setPlan] = useState(initialPlan);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -63,6 +65,18 @@ const ViewPlan = ({ route }) => {
     ])
   };
 
+  const next = () => {
+    if (currentIndex < plan.exercises.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    }
+  }
+
+  const prev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  }
+
   return (
     <View>
       <Text>{plan.name}</Text>
@@ -76,23 +90,28 @@ const ViewPlan = ({ route }) => {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={viewMuscleMap}>
-        <Text>View Muscle Map</Text>
+        <Text>Check Total Plan Load</Text>
       </TouchableOpacity>
 
       <Text>Exercises:</Text>
-      <ScrollView>
-        {plan.exercises.map((exercise) => (
-          <View key={exercise.id}>
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <TouchableOpacity onPress={prev} disabled={currentIndex === 0}>
             <Text>
-              {baza.exercises[exercise.id].name}
+              Previous
             </Text>
-            <Text>Reps: {exercise.reps}</Text>
-            <Text>Sets: {exercise.sets}</Text>
-            <Text>Weight: {exercise.weight}</Text>
-          </View>
-            
-        ))}
-      </ScrollView>
+          </TouchableOpacity>
+
+          <Text>
+            {currentIndex + 1} / {plan.exercises.length}
+          </Text>
+
+          <TouchableOpacity onPress={next} disabled={currentIndex === plan.exercises.length - 1}>
+            <Text>Next</Text>
+          </TouchableOpacity>
+        </View>
+        <ExerciseCard exercise={plan.exercises[currentIndex]} />
+      </View>
     </View>
   );
 };
