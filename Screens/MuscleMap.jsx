@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import MuscleMapSVG from '../Components/MuscleMap/MuscleMapSVG.jsx';
 import { frontLayers, rearLayers } from '../Components/MuscleMap/MuscleMapLayers.jsx';
-import baza from '../baza.json'; // do podmiany na AsyncStoarage
+import { useExerciseStore } from '../ZustandStores/ExerciseStore';
 
 const aggregateMuscleLoads = (exercises) => {
+    const { exercisesDB, fetchExercises } = useExerciseStore();
+
+    useEffect(() => {
+      fetchExercises();
+    }, []);
   const aggregated = {};
 
   exercises.forEach((exercise) => {
-    baza.exercises[exercise.id].muscle_group.forEach(({ name, load }) => {
+      exercisesDB[exercise.id].muscle_group.forEach(({ name, load }) => {
       aggregated[name] = (aggregated[name] || 0) + (load || 0);
     });
   });

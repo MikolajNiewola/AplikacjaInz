@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { StyleSheet, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,6 +15,25 @@ import CreatePlan from './Components/WorkoutPlans/CreatePlan';
 import ViewPlan from './Components/WorkoutPlans/ViewPlan';
 
 const Stack = createNativeStackNavigator();
+
+const api = axios.create({
+  baseURL: 'http://10.0.2.2:3000/api',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const fetchAndSaveExercises = async () => {
+  try {
+    const response = await api.get('/exercises');
+    const exercises = response.data;
+
+    await AsyncStorage.setItem('exercises', JSON.stringify(exercises));
+    console.log("Exercises data updated successfully.");
+  } catch (error) {
+    console.error("Error fetching exercises data", error);
+  }
+};
 
 const Rootstack = () => {
   return (
@@ -31,6 +52,10 @@ const Rootstack = () => {
 };
 
 function App() {
+  useEffect(() => {
+    fetchAndSaveExercises();
+  }, []);
+
   return (
     <NavigationContainer>
       <Rootstack />

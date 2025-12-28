@@ -1,8 +1,7 @@
-import React, { use, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import data from '../baza.json';
+import { useExerciseStore } from '../ZustandStores/ExerciseStore';
 
 const ExerciseCard = ({ item, expanded, onToggle }) => {
   const navigation = useNavigation();
@@ -15,25 +14,25 @@ const ExerciseCard = ({ item, expanded, onToggle }) => {
       </View>
 
       <TouchableOpacity style={styles.button} onPress={() => onToggle(item.id)}>
-        <Text style={styles.buttonText}>{expanded ? 'Collapse' : 'Expand'}</Text>
+        <Text style={styles.buttonText}>{expanded ? 'Ukryj' : 'Pokaż'}</Text>
       </TouchableOpacity>
 
       {expanded && (
         <View style={styles.details}>
-          <Text style={styles.detailLine}>Equipment: {item.equipment}</Text>
-          <Text style={styles.detailLine}>Type: {item.type} • Level: {item.difficulty}</Text>
+          <Text style={styles.detailLine}>Sprzęt: {item.equipment}</Text>
+          <Text style={styles.detailLine}>Typ: {item.type} • Poziom: {item.difficulty}</Text>
 
           <TouchableOpacity onPress={() => {navigation.navigate('Muscle Map', { exercises: [item] });}}>
-            <Text style={styles.subheading}>Check Muscle Load</Text>
+            <Text style={styles.subheading}>Sprawdź mapę mięśni</Text>
           </TouchableOpacity>
 
-          <Text style={styles.subheading}>Instructions:</Text>
+          <Text style={styles.subheading}>Instrukcje:</Text>
           {item.instructions.map((inst, i) => (
             <Text key={i} style={styles.instructionLine}>{i + 1}. {inst}</Text>
           ))}
 
           {item.video ? (
-            <Text style={styles.videoLink}>Video: {item.video}</Text>
+            <Text style={styles.videoLink}>Filmik: {item.video}</Text>
           ) : null}
         </View>
       )}
@@ -43,6 +42,13 @@ const ExerciseCard = ({ item, expanded, onToggle }) => {
 
 const Exercises = () => {
   const [expandedIds, setExpandedIds] = useState(new Set());
+  const [query, setQuery] = useState('');
+
+  const { exercisesDB, fetchExercises } = useExerciseStore();
+
+  useEffect(() => {
+    fetchExercises();
+  }, []);
 
   const toggle = (id) => {
     setExpandedIds(prev => {
@@ -53,10 +59,24 @@ const Exercises = () => {
     });
   };
 
+  const filteredExercises = useMemo(() => {
+    if (!query.trim()) return exercisesDB;
+    const lowerQuery = query.toLowerCase();
+    return exercisesDB.filter(ex => ex.name.toLowerCase().includes(lowerQuery) || ex.muscle_group.some(mg => mg.name.toLowerCase().includes(lowerQuery)));
+  }, [query, exercisesDB]);
+
   return (
     <View style={styles.screen}>
+      
+      <TextInput 
+        value={query}
+        onChangeText={setQuery}
+        placeholder="Search Exercises"
+        style={{ margin: 12, padding: 8, borderWidth: 1, borderColor: '#ccc', borderRadius: 8 }}
+      />
+
       <FlatList
-        data={data.exercises}
+        data={filteredExercises}
         keyExtractor={(item) => String(item.id)}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (

@@ -3,10 +3,29 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 
+const importModal = (importToken, setImportToken, handleImport) => {
+  return (
+    <View>
+      <Text>Wprowadź token aby importować dane:</Text>
+
+      <TextInput
+        value={importToken}
+        onChangeText={setImportToken}
+        placeholder="Token"
+        maxLength={5}
+      />
+
+      <TouchableOpacity onPress={handleImport}>
+        <Text>Import danych</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 const Settings = ()  => {
   const [exportToken, setExportToken] = useState('')
   const [importToken, setImportToken] = useState('')
+  const [modalVisible, setModalVisible] = useState(false);
 
   const api = axios.create({
     baseURL: 'http://10.0.2.2:3000/api',
@@ -16,12 +35,12 @@ const Settings = ()  => {
   });
 
   const handleClear = () => {
-    Alert.alert("Clear Local Storage", "Are you sure you want to delete your data?\nThis action is irreversible.", [
+    Alert.alert("Wyczść pamięć podręczną", "Czy napewno chcesz usunąć swoje dane?\n\nTa akcja jest nieodwracalna.", [
       {
-        text: "cancel"
+        text: "anuluj"
       },
       {
-        text: "DELETE",
+        text: "USUŃ",
         onPress: () => { AsyncStorage.clear() }
       }
     ])
@@ -49,7 +68,7 @@ const Settings = ()  => {
   const handleExport = async () => {
     const stored = await AsyncStorage.getItem('workouts');
     if (!stored) {
-      Alert.alert("Export error", "There is nothing to export!", [{ text: "Ok" }]);
+      Alert.alert("Błąd eksportu", "Nie ma nic do wyeksportowania!", [{ text: "Ok" }]);
       return;
     };
     
@@ -63,7 +82,7 @@ const Settings = ()  => {
 
   const handleImport = async () => {
     if (!importToken) {
-      Alert.alert("Import error", "Please enter a valid token!", [{ text: "Ok" }]);
+      Alert.alert("Błąd importu", "Wprowadź token!", [{ text: "Ok" }]);
       return;
     }
 
@@ -72,40 +91,38 @@ const Settings = ()  => {
       const data = response.data;
 
       await AsyncStorage.setItem('workouts', JSON.stringify(data));
-      Alert.alert("Import successful", "Your data has been imported successfully!", [{ text: "Ok" }]);
+      Alert.alert("Import danych", "Twoje dane zostały pomyślnie zaimportowane!", [{ text: "Ok" }]);
+
+      await api.delete(`/data-backup/${importToken}`);
+      setModalVisible(false);
     } catch (error) {
-      Alert.alert("Import error", "Failed to import data. Please check the token and try again.", [{ text: "Ok" }]);
+      Alert.alert("Błąd importu", "Błąd importu danych. Sprawdź token i spróbuj ponownie.", [{ text: "Ok" }]);
       console.error("Error importing data", error);
     }
   }
 
   return (
     <View>
-        <Text>Settings</Text>
         <TouchableOpacity onPress={handleClear}>
-          <Text>Clear Storage</Text>
+          <Text>Wyczyść pamięć podręczną</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleExport}>
-          <Text>Export Data</Text>
+          <Text>Eksportuj dane</Text>
         </TouchableOpacity>
 
         {exportToken && (
           <View>
-            <Text>Your Token: {exportToken}</Text>
+            <Text>Twój token: {exportToken}</Text>
           </View>
         )}
 
-        <TextInput
-          value={importToken}
-          onChangeText={setImportToken}
-          placeholder="Enter Import Token"
-          maxLength={5}
-        />
-
-        <TouchableOpacity onPress={handleImport}>
-          <Text>Import Data</Text>
+        <TouchableOpacity onPress={() =>setModalVisible(true)}>
+          <Text>Import danych</Text>
         </TouchableOpacity>
+
+        {modalVisible && importModal(importToken, setImportToken, handleImport)}
+
     </View>
   );
 }

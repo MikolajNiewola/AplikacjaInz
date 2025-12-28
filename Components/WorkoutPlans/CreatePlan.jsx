@@ -1,35 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import data from '../../baza.json';
+import { useExerciseStore } from '../../ZustandStores/ExerciseStore';
 import AddExercise from './AddExercise';
 
+function getLastId( array ) {
+  return array.length === 0 ? 1 : array[array.length - 1].id + 1;
+};
+
 const CreatePlan = ({ route }) => {
+  const { exercisesDB, fetchExercises } = useExerciseStore();
   const navigation = useNavigation();
   const { plan } = route.params || {};
 
   const [planName, setPlanName] = useState(plan?.name || '');
   const [selectedExercises, setSelectedExercises] = useState(plan?.exercises || []);
-  const [availableExercises, setAvailableExercises] = useState(
-    plan?.exercises
-      ? data.exercises.filter(ex => !plan.exercises.some(selected => selected.id === ex.id))
-      : data.exercises
-  );
+
+  useEffect(() => {
+    fetchExercises();
+  }, []);
+
+  const availableExercises = useMemo(() => {
+    if (!exercisesDB.length) return [];
+    const selectedIds = new Set(selectedExercises.map(ex => ex.id));
+    return exercisesDB.filter(ex => !selectedIds.has(ex.id));
+  }, [exercisesDB, selectedExercises]);
 
   const addExerciseToPlan = (exercise) => {
     setSelectedExercises(prev => [ ...prev, {...exercise, reps: 0, sets: 0} ])
-    setAvailableExercises(prev => prev.filter(ex => ex.id !== exercise.id));
   };
+
+  const removeExerciseFromPlan = (id) => {
+    setSelectedExercises(prev => prev.filter(ex => ex.id !== id));
+  }
 
   const updateExerciseInPlan = (id, fields) => {
     setSelectedExercises(prev => prev.map(ex => (ex.id === id ? { ...ex, ...fields } : ex)));
   }
-
-  const getLastId = ( array ) => {
-    return array.length === 0 ? 1 : array[array.length - 1].id + 1;
-  };
 
   const savePlan = async () => {
     const stored = await AsyncStorage.getItem('workouts');
@@ -47,57 +55,58 @@ const CreatePlan = ({ route }) => {
       })),
     };
 
-    let updatedWorkouts;
+    const updatedWorkouts = plan ? parsed.map(w => w.id === plan.id ? newWorkout : w) : [...parsed, newWorkout];
 
-    if (plan) {
-      updatedWorkouts = parsed.map(w => w.id === plan.id ? newWorkout : w);
-    } else {
-      updatedWorkouts = [...parsed, newWorkout];
-    }
-
-    AsyncStorage.setItem('workouts', JSON.stringify(updatedWorkouts));
+    await AsyncStorage.setItem('workouts', JSON.stringify(updatedWorkouts));
     
     navigation.goBack();
   };
 
   return (
-    <View>
-      <TouchableOpacity onPress={() => savePlan()}>
-        <Text>Save Plan</Text>
+    <View style={{ padding: 10 }}>
+      <TouchableOpacity onPress={savePlan}>
+        <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>Zapisz Plan</Text>
       </TouchableOpacity>
 
-      <Text>{plan ? 'Edit Plan' : 'Create New Plan'}</Text>
-      <TextInput placeholder="Plan Name" value={planName} onChangeText={setPlanName} />
+      <Text>{plan ? 'Edytuj Plan' : 'Stwórz Nowy Plan'}</Text>
+      <TextInput
+        placeholder="Nazwa Planu"
+        value={planName}
+        onChangeText={setPlanName}
+        style={{ borderWidth: 1, borderColor: '#ccc', padding: 5, marginVertical: 10 }}
+      />
 
       {/* ============================================= */}
 
       <TouchableOpacity onPress={() => {navigation.navigate('Muscle Map', { exercises: selectedExercises });}}>
-        <Text>Check Muscle Load</Text>
+        <Text>Sprawdź mapę mięśni</Text>
       </TouchableOpacity>
       
-      <Text>Selected Exercises:</Text>
-      <ScrollView style={{ height: 200 }}>
-        
-        {selectedExercises.length > 0 
-        ? selectedExercises.map((exercise) => (
-          <AddExercise 
-            key={exercise.id} 
-            exercise={exercise} 
-            onChange={(fields) => updateExerciseInPlan(exercise.id, fields)} 
-          />
-        )) 
-        : <Text>No exercises selected</Text>}
+      <Text>Dodane ćwiczenia:</Text>
+      <ScrollView style={{ maxHeight: 200, marginBottom: 20 }}>
+        {selectedExercises.length > 0 ? (
+          selectedExercises.map((exercise) => (
+            <AddExercise
+              key={exercise.id}
+              exercise={exercise}
+              onChange={(fields) => updateExerciseInPlan(exercise.id, fields)}
+              onRemove={() => removeExerciseFromPlan(exercise.id)}
+            />
+          ))
+        ) : (
+          <Text>Brak dodanych ćwiczeń</Text>
+        )}
       </ScrollView>
       
       {/* ============================================= */}
 
-      <Text>Available Exercises:</Text>
-      <ScrollView style={{ height: 200 }}>
+      <Text>Dostępne ćwiczenia:</Text>
+      <ScrollView style={{ maxHeight: 200 }}>
         {availableExercises.map((exercise) => (
-          <View key={exercise.id}>
+          <View key={exercise.id} style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
             <Text>{exercise.name}</Text>
             <TouchableOpacity onPress={() => addExerciseToPlan(exercise)}>
-              <Text>Add to plan</Text>
+              <Text style={{ color: 'blue' }}>Dodaj do planu</Text>
             </TouchableOpacity>
           </View>
         ))}

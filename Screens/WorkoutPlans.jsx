@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -24,9 +24,8 @@ const WorkoutPlans = () => {
 
   return (
     <View>
-      <Text>Workout Plans Screen</Text>
-
-      {plans.map((plan) => (
+      <Text>Twoje zapisane plany:</Text>
+      {plans && plans.map((plan) => (
         <View key={plan.id}>
           <TouchableOpacity onPress={() => navigation.navigate('View Plan', { plan })}>
             <Text>{plan.name}</Text>
@@ -34,8 +33,10 @@ const WorkoutPlans = () => {
         </View>
       ))}
 
+      {plans.length === 0 && <Text>Brak zapisanych planów treningowych.</Text>}
+
       <TouchableOpacity onPress={() => navigation.navigate('Create Plan')}>
-        <Text>+ New Plan</Text>
+        <Text>+ Nowy Plan</Text>
       </TouchableOpacity>
     </View>
   );
