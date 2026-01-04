@@ -38,7 +38,7 @@ import R_16 from '../../MuscleMapSVGs/Rear/R_16_Kosci.svg';
 export const frontLayers = [
     { name: 'lydki', Component: F_00 },
     { name: 'piszczelowy', Component: F_01 },
-    { name: 'posladkowy', Component: F_02 },
+    { name: 'posladki', Component: F_02 },
     { name: 'czworoglowy', Component: F_03 },
     { name: 'krawiecki', Component: F_04 },
     { name: 'przywodziciel', Component: F_05 },

@@ -13,6 +13,8 @@ import WorkoutPlans from './Screens/WorkoutPlans';
 
 import CreatePlan from './Components/WorkoutPlans/CreatePlan';
 import ViewPlan from './Components/WorkoutPlans/ViewPlan';
+import SelectExercises from './Components/WorkoutPlans/SelectExercises';
+import TempoTimer from './Components/WorkoutPlans/TempoTimer';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +48,8 @@ const Rootstack = () => {
 
       <Stack.Screen name="Create Plan" component={CreatePlan} />
       <Stack.Screen name="View Plan" component={ViewPlan} />
-      
+      <Stack.Screen name="Select Exercises" component={SelectExercises} />
+      <Stack.Screen name="Tempo Timer" component={TempoTimer} />
     </Stack.Navigator>
   );
 };

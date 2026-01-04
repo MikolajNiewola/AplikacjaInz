@@ -1,23 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Switch } from 'react-native';
+import { theme } from '../../Themes/index';
+
+
+const TempoInput = ({ tempo, setTempo }) => {
+  const refs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const [values, setValues] = useState(tempo ? tempo.split('-') : ['','','','']);
+
+  useEffect(() => {
+    setTempo(values.join('-'));
+  }, [values]);
+
+  const handleChange = (index, val) => {
+    const cleaned = val.replace(/[^0-9]/g, '').slice(0,1);
+    let newValues = [...values];
+    newValues[index] = cleaned;
+    setValues(newValues);
+
+    if (cleaned.length > 0 && index < 3) {
+      refs[index + 1].current?.focus();
+    }
+  };
+
+  const handleKeyPress = (index, e) => {
+    if (e.nativeEvent.key === 'Backspace') {
+      if (values[index] === '' && index > 0) {
+        refs[index - 1].current?.focus();
+      }
+    }
+  };
+
+  return (
+    <View style={styles.tempoInputRow}>
+      {values.map((val, i) => (
+        <React.Fragment key={i}>
+          <TextInput
+            ref={refs[i]}
+            value={val}
+            onChangeText={(text) => handleChange(i, text)}
+            onKeyPress={(e) => handleKeyPress(i, e)}
+            keyboardType="numeric"
+            style={styles.tempoInput}
+            maxLength={2}
+            textAlign="center"
+          />
+          {i < 3 && <Text style={styles.tempoDash}>-</Text>}
+        </React.Fragment>
+      ))}
+    </View>
+  )
+};
 
 const AddExercise = ({ exercise, onChange, onRemove }) => {    
     const [reps, setReps] = useState(exercise?.reps || 5);
     const [sets, setSets] = useState(exercise?.sets || 3);
     const [weight, setWeight] = useState(exercise?.weight !== undefined ? String(exercise.weight) : '');
 
-    const decRepCounter = () => { setReps(Math.max(reps - 1, 1)); }
-    const incRepCounter = () => { setReps(reps + 1); }
-    
-    const decSetCounter = () => { setSets(Math.max(sets - 1, 1)); }
-    const incSetCounter = () => { setSets(sets + 1); }
+    const [useTempo, setUseTempo] = useState(exercise?.tempo ? true : false);
+    const [tempo, setTempo] = useState(exercise?.tempo || '');
+
+    const decRepCounter = () => { setReps(prev => Math.max(prev - 1, 1)); }
+    const incRepCounter = () => { setReps(prev => prev + 1); }
+
+    const decSetCounter = () => { setSets(prev => Math.max(prev - 1, 1)); }
+    const incSetCounter = () => { setSets(prev => prev + 1); }
 
     useEffect(() => {
         if (onChange) {
-            const numericWeight = weight === '' ? 0 : Number(weight)
-            onChange({ reps, sets, weight: numericWeight });
+            const numericWeight = weight === '' ? 0 : Number(weight);
+            onChange({ 
+              reps, 
+              sets, 
+              weight: numericWeight, 
+              tempo: useTempo ? tempo : null 
+            });
         }
-    }, [reps, sets, weight]);
+    }, [reps, sets, weight, tempo, useTempo]);
 
     const sanitizeNumber = (text) => {
         let cleaned = String(text).replace(/[^0-9.]/g, '');
@@ -45,129 +103,195 @@ const AddExercise = ({ exercise, onChange, onRemove }) => {
         setWeight(sanitizeNumber(text));
     }
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.exerciseHeader}>
-                <Text style={styles.exerciseName}>{exercise.name}</Text>
+    const handleTempoChange = (text) => {
+        const cleaned = text.replace(/[^0-9-]/g, '');
+        setTempo(cleaned);
+    }
+    
+    const CounterButton = ({ label, onPress }) => (
+        <TouchableOpacity style={styles.counterBtn} onPress={onPress}>
+            <Text style={styles.counterBtnText}>{label}</Text>
+        </TouchableOpacity>
+    );
 
-                <TouchableOpacity onPress={onRemove}>
-                    <Text style={styles.exerciseWarning}>Usuń ćwiczenie</Text>
-                </TouchableOpacity>
+    return (
+    <View style={styles.card}>
+        <View style={styles.header}>
+            <Text style={styles.name}>{exercise.name}</Text>
+
+            <TouchableOpacity style={styles.removeBtn} onPress={onRemove}>
+                <Text style={styles.removeText}>Usuń</Text>
+            </TouchableOpacity>
+        </View>
+
+        <View style={styles.row}>
+            <View style={styles.column}>
+                <Text style={styles.label}>Serie</Text>
+                <View style={styles.counter}>
+                    <CounterButton onPress={decSetCounter} label="-" />
+                    <Text style={styles.value}>{sets}</Text>
+                    <CounterButton onPress={incSetCounter} label="+" />
+                </View>
             </View>
 
-            <View style={styles.exerciseRow}>
+            <View style={styles.column}>
+                <Text style={styles.label}>Powt.</Text>
+                <View style={styles.counter}>
+                    <CounterButton onPress={decRepCounter} label="-" />
+                    <Text style={styles.value}>{reps}</Text>
+                    <CounterButton onPress={incRepCounter} label="+" />
+                </View>
+            </View>
 
-                <View style={styles.exerciseColumn}>
-                    <Text>Serie:</Text>
-                    <View style={styles.exerciseButtonHolder}>
-                        <TouchableOpacity onPress={decSetCounter} style={styles.exerciseButton}><Text style={styles.exerciseButtonText}>-</Text></TouchableOpacity>
-                        <Text style={styles.exerciseCounter}>{sets}</Text>
-                        <TouchableOpacity onPress={incSetCounter} style={styles.exerciseButton}><Text style={styles.exerciseButtonText}>+</Text></TouchableOpacity>
-                    </View>
-                </View>
-                
-                <View style={styles.exerciseColumn}>
-                    <Text>Powtórzenia:</Text>
-                    <View style={styles.exerciseButtonHolder}>
-                        <TouchableOpacity onPress={decRepCounter} style={styles.exerciseButton}><Text style={styles.exerciseButtonText}>-</Text></TouchableOpacity>
-                        <Text style={styles.exerciseCounter}>{reps}</Text>
-                        <TouchableOpacity onPress={incRepCounter} style={styles.exerciseButton}><Text style={styles.exerciseButtonText}>+</Text></TouchableOpacity>
-                    </View>
-                </View>
-
-                <View style={styles.exerciseColumn}>
-                    <Text>Ciężar:</Text>
-                    <View style={styles.exerciseButtonHolder}>
-                        <TextInput
-                            value={weight}
-                            placeholder='0'
-                            keyboardType="decimal-pad"
-                            inputMode="decimal"
-                            contextMenuHidden={true}
-                            onChangeText={handleWeightChange}
-                            style={styles.exerciseInput}
-                        />
-                    </View>
-                </View>
+            <View style={styles.column}>
+                <Text style={styles.label}>Kg</Text>
+                <TextInput
+                    value={weight}
+                    placeholder="0"
+                    placeholderTextColor={theme.colors.textMuted}
+                    keyboardType="decimal-pad"
+                    onChangeText={handleWeightChange}
+                    style={styles.input}
+                />
             </View>
         </View>
-    );
+
+        <View style={styles.tempoRow}>
+                <Text style={styles.label}>Dodaj tempo</Text>
+                <Switch value={useTempo} onValueChange={setUseTempo} />
+        </View>
+
+        {useTempo && <TempoInput tempo={tempo} setTempo={setTempo} />}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        borderWidth: 1, 
-        borderColor: '#ccc', 
-        paddingHorizontal: 5,
-        paddingVertical: 15,
-        marginVertical: 5,
-    },
+  card: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: 12,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
 
-    exerciseHeader: { 
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        marginHorizontal: 15,
-        marginBottom: 15,
-    },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+  },
 
-    exerciseName: { 
-        fontWeight: 'bold', 
-        fontSize: 16,
-    },
+  name: {
+    color: theme.colors.textPrimary,
+    fontWeight: '700',
+    fontSize: 15,
+    flex: 1,
+    marginRight: theme.spacing.sm,
+  },
 
-    exerciseWarning: {
-        color: 'red', 
-        fontSize: 12, 
-        textAlign: 'center',
-        padding: 3,
-        borderWidth: 1,
-        borderColor: 'red',
-        borderRadius: 5,
-    },
+  removeBtn: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: theme.colors.danger,
+  },
 
-    exerciseRow: { 
-        flexDirection: 'row', 
-        justifyContent: 'space-around', 
-        marginTop: 5,
-    },
+  removeText: {
+    color: theme.colors.danger,
+    fontSize: 12,
+    fontWeight: '600',
+  },
 
-    exerciseColumn: {
-        alignItems: 'center',
-    },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 
-    exerciseButtonHolder: { 
-        flexDirection: 'row', 
-        alignItems: 'center',
-        marginTop: 5,
-    },
+  column: {
+    alignItems: 'center',
+    flex: 1,
+  },
 
-    exerciseButton: {
-        borderWidth: 1, 
-        borderColor: '#ccc', 
-        paddingHorizontal: 10, 
-        paddingVertical: 5,
-    },
+  label: {
+    color: theme.colors.textMuted,
+    fontSize: 12,
+    marginBottom: 6,
+  },
 
-    exerciseButtonText: {
-        fontSize: 18,
-    },
+  counter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surfaceSoft,
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSoft,
+  },
 
-    exerciseCounter: {
-        marginHorizontal: 5,
-        fontSize: 16,
-        minWidth: 30,
-        textAlign: 'center',
-    },
+  counterBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
 
-    exerciseInput: {
-        textAlign: 'center', 
-        borderWidth: 1, 
-        borderColor: '#ccc', 
-        padding: 0,
-        width: 60,
-        height: 35,
-    },
+  counterBtnText: {
+    color: theme.colors.accent,
+    fontSize: 18,
+    fontWeight: '700',
+  },
+
+  value: {
+    color: theme.colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '600',
+    minWidth: 30,
+    textAlign: 'center',
+  },
+
+  input: {
+    backgroundColor: theme.colors.surfaceSoft,
+    borderRadius: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    minWidth: 60,
+    textAlign: 'center',
+    color: theme.colors.textPrimary,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSoft,
+  },
+
+  tempoRow: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    marginTop: theme.spacing.md 
+  },
+    
+  tempoInputRow: { 
+    flexDirection: 'row', 
+    marginTop: theme.spacing.sm, 
+    alignItems: 'center' 
+  },
+
+  tempoInput: { 
+    width: 40, 
+    height: 40, 
+    borderWidth: 1, 
+    borderColor: theme.colors.borderSoft, 
+    borderRadius: 8, marginHorizontal: 2, 
+    textAlign: 'center', 
+    color: theme.colors.textPrimary 
+  },
+    
+  tempoDash: { 
+    fontSize: 18, 
+    fontWeight: '700', 
+    marginHorizontal: 2, 
+    color: theme.colors.textMuted 
+  },
 });
+
 
 export default AddExercise;

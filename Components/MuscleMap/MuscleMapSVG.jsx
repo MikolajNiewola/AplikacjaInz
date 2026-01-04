@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Svg, G } from 'react-native-svg';
 
 const loadToColor = (load) => {
-    if (load > 20) return 'rgba(255, 0, 0, 1)';
+    if (load > 20) return 'rgba(161, 11, 11, 1)';
     if (load > 15) return 'rgba(255, 115, 0, 1)';
     if (load > 10) return 'rgba(255, 172, 105, 1)';
     if (load > 5)  return 'rgba(255, 242, 125, 1)';
