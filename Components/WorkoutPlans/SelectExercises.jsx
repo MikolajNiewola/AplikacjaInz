@@ -40,8 +40,6 @@ const SelectExercises = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Wybierz ćwiczenia</Text>
-
       <TextInput
         value={query}
         onChangeText={setQuery}
@@ -91,12 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
     padding: theme.spacing.md,
-  },
-
-  title: {
-    ...theme.typography.title,
-    color: theme.colors.textPrimary,
-    marginBottom: theme.spacing.md,
   },
 
   searchInput: {

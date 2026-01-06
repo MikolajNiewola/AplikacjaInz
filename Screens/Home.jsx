@@ -9,7 +9,7 @@ const Home = () => {
 
     const HomeTile = ({ label, onPress }) => (
         <TouchableOpacity
-            style={styles.tile}
+            style={[styles.tile]}
             onPress={onPress}
         >
             <Text style={styles.tileText}>{label}</Text>
@@ -17,14 +17,20 @@ const Home = () => {
     );
 
     return (
-        <ImageBackground source={require('../assets/BackgroundImages/HomeHeader.jpg')} style={styles.background} imageStyle={styles.backgroundImage}>
+        <ImageBackground 
+            source={require('../assets/BackgroundImages/HomeHeader3.jpg')} 
+            style={styles.background} 
+            imageStyle={styles.backgroundImage}
+        >
             <View style={styles.overlay} />
 
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Gotowy na trening?</Text>
-                <Text style={styles.headerSubtitle}>
-                    Zrób dziś krok bliżej swojej formy
-                </Text>
+                <View style={styles.headerTextWrapper}>
+                    <Text style={styles.headerTitle}>Gotowy na trening?</Text>
+                    <Text style={styles.headerSubtitle}>
+                        Zrób dziś krok bliżej swojej formy
+                    </Text>
+                </View>
 
                 <TouchableOpacity style={styles.headerBtn} onPress={() => navigation.navigate('Workout Plans')}>
                     <Text style={styles.headerBtnText}>Zacznij trening</Text>
@@ -56,9 +62,17 @@ const styles = StyleSheet.create({
     },
 
     header: {
-        flex: 2.2,
-        justifyContent: 'flex-end',
+        flex: 2.5,
+        justifyContent: 'flex-start',
         padding: theme.spacing.lg,
+    },
+
+    headerTextWrapper: {
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 12,
+        width: '100%',
     },
 
     headerTitle: {
@@ -68,9 +82,8 @@ const styles = StyleSheet.create({
     },
 
     headerSubtitle: {
-        color: 'rgba(255,255,255,0.75)',
-        marginTop: 6,
-        marginBottom: theme.spacing.sm,
+        color: 'rgba(255,255,255,0.85)',
+        marginTop: 4,
         fontSize: 14,
     },
 
@@ -95,7 +108,7 @@ const styles = StyleSheet.create({
     },
 
     grid: {
-        flex: 3,
+        flex: 2,
         padding: theme.spacing.md,
         flexDirection: 'row',
         flexWrap: 'wrap',

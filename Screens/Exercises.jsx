@@ -75,17 +75,70 @@ const Exercises = () => {
 
     const toggle = (id) => {
         setExpandedIds(prev => {
-        const next = new Set(prev);
-        if (next.has(id)) next.delete(id);
-        else next.add(id);
-        return next;
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
         });
+    };
+
+    const levenshtein = (a, b) => {
+        if (a.length === 0) return b.length;
+        if (b.length === 0) return a.length;
+
+        const matrix = Array.from({ length: b.length + 1 }, () =>
+            Array(a.length + 1).fill(0)
+        );
+
+        for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
+        for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
+
+        for (let j = 1; j <= b.length; j++) {
+            for (let i = 1; i <= a.length; i++) {
+                if (a[i - 1] === b[j - 1]) {
+                    matrix[j][i] = matrix[j - 1][i - 1];
+                } else {
+                    matrix[j][i] = Math.min(
+                        matrix[j - 1][i] + 1,
+                        matrix[j][i - 1] + 1,
+                        matrix[j - 1][i - 1] + 1
+                    );
+                }
+            }
+        }
+
+        return matrix[b.length][a.length];
+    };
+
+    const fuzzyMatch = (query, text, maxDistance = 2) => {
+        if (!text) return false;
+
+        const q = query.toLowerCase();
+        const t = text.toLowerCase();
+
+        if (t.includes(q)) return true;
+
+        const words = t.split(' ');
+
+        return words.some(word =>
+            levenshtein(q, word) <= maxDistance
+        );
     };
 
     const filteredExercises = useMemo(() => {
         if (!query.trim()) return exercisesDB;
-        const lowerQuery = query.toLowerCase();
-        return exercisesDB.filter(ex => ex.name.toLowerCase().includes(lowerQuery) || ex.muscle_group.some(mg => mg.name.toLowerCase().includes(lowerQuery)));
+
+        if (query.length < 3) return exercisesDB;
+
+        return exercisesDB.filter(ex => {
+            if (fuzzyMatch(query, ex.name)) return true;
+
+            if (ex.muscle_group?.some(mg =>
+                fuzzyMatch(query, mg.name)
+            )) return true;
+
+            return false;
+        });
     }, [query, exercisesDB]);
 
     return (

@@ -239,9 +239,9 @@ const styles = StyleSheet.create({
   },
 
   navBtn: {
-    width: 36,
+    width: 56,
     height: 36,
-    borderRadius: 18,
+    borderRadius: 6,
     backgroundColor: theme.colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
