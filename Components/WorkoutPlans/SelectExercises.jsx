@@ -2,86 +2,84 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, TextInput } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useExerciseStore } from '../../ZustandStores/ExerciseStore';
+import { filterExercises } from '../../utils/exerciseSearch';
 import { theme } from '../../Themes/index';
 
 const SelectExercises = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
+    const navigation = useNavigation();
+    const route = useRoute();
 
-  const { exercisesDB, setPickedExercisesTemp } = useExerciseStore();
-  const selectedIds = route.params?.selectedIds || [];
+    const { exercisesDB, setPickedExercisesTemp } = useExerciseStore();
+    const selectedIds = route.params?.selectedIds || [];
 
-  const [picked, setPicked] = useState([]);
-  const [query, setQuery] = useState('');
+    const [picked, setPicked] = useState([]);
+    const [query, setQuery] = useState('');
 
-  const availableExercises = useMemo(
-    () => exercisesDB.filter(ex => !selectedIds.includes(ex.id)),
-    [exercisesDB, selectedIds]
-  );
-
-  const filteredExercises = useMemo(() => {
-    if (!query.trim()) return exercisesDB;
-    const lowerQuery = query.toLowerCase();
-    return exercisesDB.filter(ex => ex.name.toLowerCase().includes(lowerQuery) || ex.muscle_group.some(mg => mg.name.toLowerCase().includes(lowerQuery)));
-  }, [query, exercisesDB]);
-
-  const togglePick = (exercise) => {
-    setPicked(prev =>
-      prev.some(e => e.id === exercise.id)
-        ? prev.filter(e => e.id !== exercise.id)
-        : [...prev, exercise]
+    const availableExercises = useMemo(
+        () => exercisesDB.filter(ex => !selectedIds.includes(ex.id)),
+        [exercisesDB, selectedIds]
     );
-  };
 
-  const confirm = () => {
-    setPickedExercisesTemp(picked);
-    navigation.goBack();
-  };
+    const filteredExercises = useMemo(() => {
+        return filterExercises(availableExercises, query);
+    }, [query, availableExercises]);
 
-  return (
-    <View style={styles.container}>
-      <TextInput
-        value={query}
-        onChangeText={setQuery}
-        placeholder="Wyszukaj ćwiczenie lub grupę mięśniową"
-        placeholderTextColor={theme.colors.textMuted}
-        style={styles.searchInput}
-      />
+    const togglePick = (exercise) => {
+        setPicked(prev =>
+        prev.some(e => e.id === exercise.id)
+            ? prev.filter(e => e.id !== exercise.id)
+            : [...prev, exercise]
+        );
+    };
 
-      <ScrollView style={styles.list}>
-        {filteredExercises.map(ex => {
-          const isPicked = picked.some(p => p.id === ex.id);
+    const confirm = () => {
+        setPickedExercisesTemp(picked);
+        navigation.goBack();
+    };
 
-          return (
+    return (
+        <View style={styles.container}>
+        <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Wyszukaj ćwiczenie lub grupę mięśniową"
+            placeholderTextColor={theme.colors.textMuted}
+            style={styles.searchInput}
+        />
+            <ScrollView style={styles.list}>
+                {filteredExercises.map(ex => { const isPicked = picked.some(p => p.id === ex.id);
+                    return (
+                        <TouchableOpacity
+                            key={ex.id}
+                            onPress={() => togglePick(ex)}
+                            style={[styles.item, isPicked && styles.itemPicked]}
+                        >
+                            <View style={styles.headerRow}>
+                                <Text style={styles.name}>{ex.name}</Text>
+                                <Text style={styles.badge}>{isPicked ? '✓' : '+'}</Text>
+                            </View>
+
+                            <View style={styles.metaRow}>
+                                {ex.equipment.length > 0 && (
+                                    <Text style={styles.meta}>Sprzęt: {ex.equipment.join(', ')}</Text>
+                                )}
+                                <Text style={styles.meta}>Typ: {ex.type}</Text>
+                                <Text style={styles.meta}>Poziom: {ex.difficulty}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    );
+                })}
+            </ScrollView>
+
             <TouchableOpacity
-              key={ex.id}
-              onPress={() => togglePick(ex)}
-              style={[styles.item, isPicked && styles.itemPicked]}
+                onPress={confirm}
+                disabled={!picked.length}
+                style={[styles.confirmBtn, !picked.length && styles.confirmBtnDisabled]}
             >
-              <View style={styles.headerRow}>
-                <Text style={styles.name}>{ex.name}</Text>
-                <Text style={styles.badge}>{isPicked ? '✓' : '+'}</Text>
-              </View>
-
-              <View style={styles.metaRow}>
-                <Text style={styles.meta}>Sprzęt: {ex.equipment}</Text>
-                <Text style={styles.meta}>Typ: {ex.type}</Text>
-                <Text style={styles.meta}>Poziom: {ex.difficulty}</Text>
-              </View>
+                <Text style={styles.confirmText}>Dodaj ({picked.length})</Text>
             </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-
-      <TouchableOpacity
-        onPress={confirm}
-        disabled={!picked.length}
-        style={[styles.confirmBtn, !picked.length && styles.confirmBtnDisabled]}
-      >
-        <Text style={styles.confirmText}>Dodaj ({picked.length})</Text>
-      </TouchableOpacity>
-    </View>
-  );
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({

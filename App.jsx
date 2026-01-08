@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { StyleSheet, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import BootSplash from "react-native-bootsplash";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faHeartbeat, faCalendar, faCog } from '@fortawesome/free-solid-svg-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { useUserProfileStore } from './ZustandStores/UserProfileStore';
 import { theme } from './Themes/index';
 
 import Home from './Screens/Home';
@@ -14,33 +13,16 @@ import Settings from './Screens/Settings';
 import Exercises from './Screens/Exercises';
 import MuscleMap from './Screens/MuscleMap';
 import WorkoutPlans from './Screens/WorkoutPlans';
+import Records from './Screens/Records';
 
 import CreatePlan from './Components/WorkoutPlans/CreatePlan';
 import ViewPlan from './Components/WorkoutPlans/ViewPlan';
 import SelectExercises from './Components/WorkoutPlans/SelectExercises';
 import TempoTimer from './Components/WorkoutPlans/TempoTimer';
+import UserProfileModal from './Components/User/UserProfileModal';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-const api = axios.create({
-    baseURL: 'http://10.0.2.2:3000/api',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
-
-const fetchAndSaveExercises = async () => {
-    try {
-        const response = await api.get('/exercises');
-        const exercises = response.data;
-
-        await AsyncStorage.setItem('exercises', JSON.stringify(exercises));
-        console.log("Exercises data updated successfully.");
-    } catch (error) {
-        console.error("Error fetching exercises data", error);
-    }
-};
 
 const Rootstack = () => {
     return (
@@ -66,6 +48,7 @@ const Rootstack = () => {
             <Stack.Screen name="View Plan" component={ViewPlan} options={{ title: 'Twój plan treningowy' }} />
             <Stack.Screen name="Select Exercises" component={SelectExercises}  options={{ title: 'Wybierz ćwiczenia' }}/>
             <Stack.Screen name="Tempo Timer" component={TempoTimer} options={{ title: 'Licznik tempa' }} />
+            <Stack.Screen name="Records" component={Records} options={{title: 'Rekordy'}} />
         </Stack.Navigator>
     );
 };
@@ -125,21 +108,33 @@ const TabsNavigator = () => {
 }
 
 function App() {
+    const [appReady, setAppReady] = useState(false);
+
+    const { isInitialized, loadProfile } = useUserProfileStore();
+
     useEffect(() => {
-        fetchAndSaveExercises();
+        const init = async () => {
+            try {
+                await loadProfile();
+            } catch (e) {
+                console.error('Init error: ', e);
+            } finally {
+                setAppReady(true);
+                await BootSplash.hide({fade: true});
+            }
+        };
+
+        init()
     }, []);
 
     return (
         <NavigationContainer>
             <Rootstack />
+            {appReady && (
+                <UserProfileModal visible={!isInitialized} force />
+            )}
         </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-});
 
 export default App;

@@ -31,7 +31,7 @@ const CreatePlan = () => {
                 const existingIds = new Set(prev.map(ex => ex.id));
                 const withDefaults = pickedExercisesTemp
                 .filter(ex => !existingIds.has(ex.id))
-                .map(ex => ({ ...ex, reps: 0, sets: 0, weight: 0 }));
+                .map(ex => ({ ...ex, reps: ex.reps ?? 5, sets: ex.sets ?? 3, weight: ex.weight ?? 0 }));
                 return [...prev, ...withDefaults];
             });
             setPickedExercisesTemp([]);

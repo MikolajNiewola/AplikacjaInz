@@ -7,15 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay';
 
 const ExerciseCard = ({ exercise }) => {
-    const { exercisesDB, fetchExercises } = useExerciseStore();
+    const { exercisesDB } = useExerciseStore();
     const navigation = useNavigation();
-
-    useEffect(() => {
-        fetchExercises();
-    }, []);
     
     const [expanded, setExpanded] = useState(false);
-    const exerciseData = exercisesDB[exercise.id];
+    const exerciseData = exercisesDB.find(e => e.id === exercise.id);
 
     const Stat = ({ label, value }) => (
         <View style={styles.stat}>
@@ -30,66 +26,66 @@ const ExerciseCard = ({ exercise }) => {
     };
 
     return (
-    <View style={styles.card}>
-        <View style={styles.header}>
-            <Text style={styles.name}>{exercise.name}</Text>
-        </View>
+        <View style={styles.card}>
+            <View style={styles.header}>
+                <Text style={styles.name}>{exercise.name}</Text>
+            </View>
 
-        <View style={styles.statsRow}>
-            <Stat label="Serie" value={exercise.sets} />
-            <Stat label="Powt." value={exercise.reps} />
-            <Stat label="Kg" value={exercise.weight} />
-        </View>
+            <View style={styles.statsRow}>
+                <Stat label="Serie" value={exercise.sets} />
+                <Stat label="Powt." value={exercise.reps} />
+                <Stat label="Kg" value={exercise.weight} />
+            </View>
 
-        {exercise.tempo && (
-            <View style={styles.tempoBox}>
-                <Text style={styles.tempoTitle}>Tempo</Text>
+            {exercise.tempo && (
+                <View style={styles.tempoBox}>
+                    <Text style={styles.tempoTitle}>Tempo</Text>
 
-                <Text style={styles.tempoValueBig}>
-                    {exercise.tempo}
-                </Text>
+                    <Text style={styles.tempoValueBig}>
+                        {exercise.tempo}
+                    </Text>
 
+                    <TouchableOpacity
+                        style={styles.tempoStartBtn}
+                        onPress={goToTempoTimer}
+                        activeOpacity={0.8}
+                    >
+                        <View style={styles.tempoStartContent}>
+                        <FontAwesomeIcon
+                            icon={faPlay}
+                            size={14}
+                            color="#000"
+                            style={styles.tempoStartIcon}
+                        />
+                        <Text style={styles.tempoStartText}>Licznik tempa</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )}
+
+            {exerciseData?.instructions?.length > 0 && (
                 <TouchableOpacity
-                    style={styles.tempoStartBtn}
-                    onPress={goToTempoTimer}
-                    activeOpacity={0.8}
+                    style={styles.toggleBtn}
+                    onPress={() => setExpanded(prev => !prev)}
                 >
-                    <View style={styles.tempoStartContent}>
-                    <FontAwesomeIcon
-                        icon={faPlay}
-                        size={14}
-                        color="#000"
-                        style={styles.tempoStartIcon}
-                    />
-                    <Text style={styles.tempoStartText}>Licznik tempa</Text>
-                    </View>
+                    <Text style={styles.toggleText}>
+                        {expanded ? 'Ukryj instrukcje' : 'Pokaż instrukcje'}
+                    </Text>
                 </TouchableOpacity>
-            </View>
-        )}
+            )}
 
-        {exerciseData?.instructions?.length > 0 && (
-            <TouchableOpacity
-                style={styles.toggleBtn}
-                onPress={() => setExpanded(prev => !prev)}
-            >
-                <Text style={styles.toggleText}>
-                    {expanded ? 'Ukryj instrukcje' : 'Pokaż instrukcje'}
-                </Text>
-            </TouchableOpacity>
-        )}
-
-        {expanded && exerciseData?.instructions && (
-            <View style={styles.instructions}>
-                {exerciseData.instructions.map((inst, index) => (
-                    <View key={index} style={styles.instructionRow}>
-                        <Text style={styles.bullet}>•</Text>
-                        <Text style={styles.instructionText}>{inst}</Text>
-                    </View>
-                ))}
-            </View>
-        )}
-    </View>
-  );
+            {expanded && exerciseData?.instructions && (
+                <View style={styles.instructions}>
+                    {exerciseData.instructions.map((inst, index) => (
+                        <View key={index} style={styles.instructionRow}>
+                            <Text style={styles.bullet}>•</Text>
+                            <Text style={styles.instructionText}>{inst}</Text>
+                        </View>
+                    ))}
+                </View>
+            )}
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

@@ -9,264 +9,265 @@ import { faRightLong } from '@fortawesome/free-solid-svg-icons/faRightLong';
 import { faLeftLong } from '@fortawesome/free-solid-svg-icons/faLeftLong';
 
 const ViewPlan = ({ route }) => {
-  const navigation = useNavigation();
-  const { plan: initialPlan } = route.params;
+    const navigation = useNavigation();
+    const { plan: initialPlan } = route.params;
 
-  const [plan, setPlan] = useState(initialPlan);
-  const [currentIndex, setCurrentIndex] = useState(0);
+    const [plan, setPlan] = useState(initialPlan);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-  useFocusEffect(
-    useCallback(() => {
-      const loadPlan = async () => {
-        try {
-          const stored = await AsyncStorage.getItem('workouts');
-          const parsed = JSON.parse(stored);
+    useFocusEffect(
+        useCallback(() => {
+        const loadPlan = async () => {
+            try {
+                const stored = await AsyncStorage.getItem('workouts');
+                const parsed = JSON.parse(stored);
 
-          const updatedPlan = parsed.find(p => p.id === initialPlan.id);
-          if (updatedPlan) setPlan(updatedPlan);
-        } catch (e) {
-          console.error('Error loading plan to viewer:', e);
+                const updatedPlan = parsed.find(p => p.id === initialPlan.id);
+                if (updatedPlan) setPlan(updatedPlan);
+                if (currentIndex >= updatedPlan.exercises.length) setCurrentIndex(0);
+            } catch (e) {
+                console.error('Error loading plan to viewer:', e);
+            }
+        };
+
+        loadPlan();
+        }, [])
+    );
+
+    const viewMuscleMap = () => {
+        navigation.navigate('Muscle Map', { exercises: plan.exercises });
+    };
+
+    const handleEdit = () => {
+        navigation.navigate('Create Plan', { plan });
+    };
+
+    const handleDelete = () => {
+        Alert.alert("Usuwanie planu", "Czy napewno chcesz usunąć ten plan?", [
+            {
+                    text: "Anuluj",
+            },
+            {
+                text: "USUŃ",
+                onPress: async () => {
+                try {
+                    const plans = await AsyncStorage.getItem('workouts');
+                    
+                    const parsedPlans = JSON.parse(plans);
+
+                    const filtered = parsedPlans.filter(p => p.id !== plan.id);
+
+                    await AsyncStorage.setItem('workouts', JSON.stringify(filtered));
+                    setTimeout(() => {
+                        navigation.goBack();
+                    }, 0);
+                    
+                    } catch (e) {
+                        console.error('Error deleting a workout: ', e);
+                    }
+                }
+            }
+        ])
+    };
+
+    const next = () => {
+        if (currentIndex < plan.exercises.length - 1) {
+            setCurrentIndex(prev => prev + 1);
         }
-      };
+    }
 
-      loadPlan();
-    }, [])
-  );
-
-  const viewMuscleMap = () => {
-    navigation.navigate('Muscle Map', { exercises: plan.exercises });
-  };
-
-  const handleEdit = () => {
-    navigation.navigate('Create Plan', { plan });
-  };
-
-  const handleDelete = () => {
-    Alert.alert("Usuwanie planu", "Czy napewno chcesz usunąć ten plan?", [
-      {
-        text: "Anuluj",
-      },
-      {
-        text: "USUŃ",
-        onPress: async () => {
-          try {
-            const plans = await AsyncStorage.getItem('workouts');
-            
-            const parsedPlans = JSON.parse(plans);
-
-            const filtered = parsedPlans.filter(p => p.id !== plan.id);
-
-            await AsyncStorage.setItem('workouts', JSON.stringify(filtered));
-            setTimeout(() => {
-              navigation.goBack();
-            }, 0);
-              
-          } catch (e) {
-            console.error('Error deleting a workout: ', e);
-          }
+    const prev = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex(prev => prev - 1);
         }
-      }
-    ])
-  };
-
-  const next = () => {
-    if (currentIndex < plan.exercises.length - 1) {
-      setCurrentIndex(prev => prev + 1);
     }
-  }
 
-  const prev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-    }
-  }
+    return (
+        <View style={styles.container}>
+        <View style={styles.header}>
+            <Text style={styles.title}>{plan.name}</Text>
 
-   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{plan.name}</Text>
-
-        <View style={styles.headerActions}>
-          <TouchableOpacity
-            style={styles.editBtn}
-            onPress={() => handleEdit()}
-          >
-            <Text style={styles.editText}>Edytuj</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.deleteBtn}
-            onPress={handleDelete}
-          >
-            <Text style={styles.deleteText}>Usuń</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <TouchableOpacity
-        style={styles.mapBtn}
-        onPress={() => viewMuscleMap()}
-      >
-        <Text style={styles.mapText}>Sprawdź mapę mięśni</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.sectionTitle}>Ćwiczenia</Text>
-
-      
-        <View style={styles.exerciseCardWrapper}>
-          <View style={styles.carouselHeader}>
+            <View style={styles.headerActions}>
             <TouchableOpacity
-              onPress={prev}
-              disabled={currentIndex === 0}
-              style={[ styles.navBtn, currentIndex === 0 && styles.navBtnDisabled ]}
+                style={styles.editBtn}
+                onPress={() => handleEdit()}
             >
-              <FontAwesomeIcon icon={faLeftLong} color={theme.colors.accent} />
+                <Text style={styles.editText}>Edytuj</Text>
             </TouchableOpacity>
-            <Text style={styles.counter}>
-              {currentIndex + 1} / {plan.exercises.length}
-            </Text>
+
             <TouchableOpacity
-              onPress={next}
-              disabled={currentIndex === plan.exercises.length - 1}
-              style={[ styles.navBtn, currentIndex === plan.exercises.length - 1 && styles.navBtnDisabled ]}
+                style={styles.deleteBtn}
+                onPress={handleDelete}
             >
-              <FontAwesomeIcon icon={faRightLong} color={theme.colors.accent} />  
+                <Text style={styles.deleteText}>Usuń</Text>
             </TouchableOpacity>
-          </View>
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ paddingBottom: 24 }}
-            showsVerticalScrollIndicator={false}
-          >
-            <ExerciseCard exercise={plan.exercises[currentIndex]} />
-          </ScrollView>
+            </View>
         </View>
-    </View>
-  );
+
+        <TouchableOpacity
+            style={styles.mapBtn}
+            onPress={() => viewMuscleMap()}
+        >
+            <Text style={styles.mapText}>Sprawdź mapę mięśni</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.sectionTitle}>Ćwiczenia</Text>
+
+        
+            <View style={styles.exerciseCardWrapper}>
+                <View style={styles.carouselHeader}>
+                    <TouchableOpacity
+                        onPress={prev}
+                        disabled={currentIndex === 0}
+                        style={[ styles.navBtn, currentIndex === 0 && styles.navBtnDisabled ]}
+                    >
+                        <FontAwesomeIcon icon={faLeftLong} color={theme.colors.accent} />
+                    </TouchableOpacity>
+                    <Text style={styles.counter}>
+                        {currentIndex + 1} / {plan.exercises.length}
+                    </Text>
+                    <TouchableOpacity
+                        onPress={next}
+                        disabled={currentIndex === plan.exercises.length - 1}
+                        style={[ styles.navBtn, currentIndex === plan.exercises.length - 1 && styles.navBtnDisabled ]}
+                    >
+                        <FontAwesomeIcon icon={faRightLong} color={theme.colors.accent} />  
+                    </TouchableOpacity>
+                </View>
+                <ScrollView
+                    style={{ flex: 1 }}
+                    contentContainerStyle={{ paddingBottom: 24 }}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <ExerciseCard exercise={plan.exercises[currentIndex]} />
+                </ScrollView>
+            </View>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-    padding: theme.spacing.md,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: theme.colors.background,
+        padding: theme.spacing.md,
+    },
 
-  header: {
-    marginBottom: theme.spacing.md,
-  },
+    header: {
+        marginBottom: theme.spacing.md,
+    },
 
-  title: {
-    color: theme.colors.textPrimary,
-    fontSize: 20,
-    fontWeight: '800',
-    marginBottom: theme.spacing.sm,
-  },
+    title: {
+        color: theme.colors.textPrimary,
+        fontSize: 20,
+        fontWeight: '800',
+        marginBottom: theme.spacing.sm,
+    },
 
-  headerActions: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
-  },
+    headerActions: {
+        flexDirection: 'row',
+        gap: theme.spacing.sm,
+    },
 
-  editBtn: {
-    backgroundColor: theme.colors.surfaceSoft,
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: theme.colors.borderSoft,
-  },
+    editBtn: {
+        backgroundColor: theme.colors.surfaceSoft,
+        paddingVertical: 6,
+        paddingHorizontal: 14,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+    },
 
-  editText: {
-    color: theme.colors.textPrimary,
-    fontWeight: '600',
-  },
+    editText: {
+        color: theme.colors.textPrimary,
+        fontWeight: '600',
+    },
 
-  deleteBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: theme.colors.danger,
-  },
+    deleteBtn: {
+        paddingVertical: 6,
+        paddingHorizontal: 14,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: theme.colors.danger,
+    },
 
-  deleteText: {
-    color: theme.colors.danger,
-    fontWeight: '600',
-  },
+    deleteText: {
+        color: theme.colors.danger,
+        fontWeight: '600',
+    },
 
-  mapBtn: {
-    marginBottom: theme.spacing.md,
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderRadius: 12,
-    backgroundColor: theme.colors.accent,
-  },
+    mapBtn: {
+        marginBottom: theme.spacing.md,
+        paddingVertical: 12,
+        alignItems: 'center',
+        borderRadius: 12,
+        backgroundColor: theme.colors.accent,
+    },
 
-  mapText: {
-    color: '#fff',
-    fontWeight: '700',
-  },
+    mapText: {
+        color: '#fff',
+        fontWeight: '700',
+    },
 
-  sectionTitle: {
-    color: theme.colors.textMuted,
-    fontSize: 13,
-    marginBottom: theme.spacing.sm,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
+    sectionTitle: {
+        color: theme.colors.textMuted,
+        fontSize: 13,
+        marginBottom: theme.spacing.sm,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+    },
 
-  exerciseCardWrapper: {
-    flex: 1,
-    backgroundColor: theme.colors.surface,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    marginBottom: theme.spacing.md,
-    overflow: 'hidden',
-  },
+    exerciseCardWrapper: {
+        flex: 1,
+        backgroundColor: theme.colors.surface,
+        borderRadius: 14,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+        marginBottom: theme.spacing.md,
+        overflow: 'hidden',
+    },
 
-  carouselHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    backgroundColor: theme.colors.surfaceSoft,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderSoft,
-    zIndex: 1,
-  },
+    carouselHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: theme.spacing.md,
+        paddingVertical: theme.spacing.sm,
+        backgroundColor: theme.colors.surfaceSoft,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.colors.borderSoft,
+        zIndex: 1,
+    },
 
-  navBtn: {
-    width: 56,
-    height: 36,
-    borderRadius: 6,
-    backgroundColor: theme.colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: theme.colors.borderSoft,
-  },
+    navBtn: {
+        width: 56,
+        height: 36,
+        borderRadius: 6,
+        backgroundColor: theme.colors.surface,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+    },
 
-  navBtnDisabled: {
-    opacity: 0.3,
-  },
+    navBtnDisabled: {
+        opacity: 0.3,
+    },
 
-  navText: {
-    color: theme.colors.accent,
-    fontSize: 32,
-    fontWeight: '800',
-    textAlignVertical: 'center',
-  },
+    navText: {
+        color: theme.colors.accent,
+        fontSize: 32,
+        fontWeight: '800',
+        textAlignVertical: 'center',
+    },
 
-  counter: {
-    color: theme.colors.textMuted,
-    fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
+    counter: {
+        color: theme.colors.textMuted,
+        fontSize: 12,
+        fontWeight: '600',
+        letterSpacing: 1,
+        textTransform: 'uppercase',
+    },
 });
 
 

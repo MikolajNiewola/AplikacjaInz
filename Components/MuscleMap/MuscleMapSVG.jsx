@@ -1,40 +1,98 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Svg, G } from 'react-native-svg';
-import { theme } from '../../Themes/index';
+import { theme } from '../../Themes';
+import { useUserProfileStore } from '../../ZustandStores/UserProfileStore';
 
-const loadToColor = (load) => {
-    if (load > 20) return theme.colors.red;
-    if (load > 15) return theme.colors.orange;
-    if (load > 10) return theme.colors.yellow;
-    if (load > 5)  return theme.colors.green;
-    if (load > 0)  return theme.colors.lightGreen;
-    return 'black'
+const VOLUME_THRESHOLDS = {
+    strength: {
+        low: 200,
+        high: 1200,
+    },
+    hypertrophy: {
+        low: 400,
+        high: 2500,
+    },
+    endurance: {
+        low: 800,
+        high: 3500,
+    },
 };
 
-const computeFillsByName = (layers, muscleLoads) => {
+const volumeToRatio = (volume, goal) => {
+    if (!Number.isFinite(volume) || volume <= 0) return 0;
+
+    const { high } =
+        VOLUME_THRESHOLDS[goal] ?? VOLUME_THRESHOLDS.hypertrophy;
+
+    const r = volume / high;
+
+    return Math.min(Math.max(r, 0.15), 1);
+};
+
+const ratioToColor = (ratio) => {
+    if (!Number.isFinite(ratio) || ratio <= 0) return 'black';
+
+    const r = Math.min(ratio, 1.2);
+
+    const hue = 120 - Math.min(r, 1) * 120;
+
+    const saturation = 40 + r * 60;
+    const lightness = 78 - r * 40;
+
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+};
+
+const calculatePreviewFills = (layers, muscleRatios) => {
     const fills = {};
-    layers.forEach((layer) => (fills[layer.name] = 'black'));
+    layers.forEach(layer => (fills[layer.name] = 'black'));
 
-    if (!muscleLoads) return fills;
+    if (!muscleRatios) return fills;
 
-    Object.entries(muscleLoads).forEach(([name, load]) => {
-        const layer = layers.find((layer) => layer.name === name);
-        if (layer) fills[layer.name] = loadToColor(load);
+    Object.entries(muscleRatios).forEach(([name, ratio]) => {
+        if (fills[name] !== undefined) {
+            fills[name] = ratioToColor(ratio);
+        }
     });
 
     return fills;
 };
 
-const MuscleMapSVG = ({ layers, muscleLoads }) => {
-    const fills = computeFillsByName(layers, muscleLoads);
+const calculateVolumeFills = (layers, muscleVolumes, goal) => {
+    const fills = {};
+    layers.forEach(layer => (fills[layer.name] = 'black'));
+
+    if (!muscleVolumes) return fills;
+
+    Object.entries(muscleVolumes).forEach(([name, volume]) => {
+        if (fills[name] === undefined) return;
+
+        const ratio = volumeToRatio(volume, goal);
+        fills[name] = ratioToColor(ratio);
+    });
+
+    return fills;
+};
+
+const MuscleMapSVG = ({ layers, muscleVolumes, preview = false }) => {
+    const { goal } = useUserProfileStore();
+
+    const fills = preview
+        ? calculatePreviewFills(layers, muscleVolumes)
+        : calculateVolumeFills(layers, muscleVolumes, goal);
 
     return (
         <View style={styles.svgWrapper}>
             <Svg width="100%" height="100%">
                 {layers.map(({ name, Component }, index) => (
                     <G key={index}>
-                        <Component width="100%" height="100%" fill={fills[name]} stroke={theme.colors.borderSoft} strokeWidth={0.5} />
+                        <Component
+                            width="100%"
+                            height="100%"
+                            fill={fills[name]}
+                            stroke={theme.colors.borderSoft}
+                            strokeWidth={0.5}
+                        />
                     </G>
                 ))}
             </Svg>

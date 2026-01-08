@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 import { theme } from '../../Themes/index';
 import { useExerciseStore } from '../../ZustandStores/ExerciseStore'
@@ -14,36 +14,48 @@ export const PlanFillerModal = ({ currentExercises, maxExercises = 9, onAddExerc
     const priorityMuscles = ['czworoglowy', 'posladki', 'lydki', 'piersiowy', 'najszerszy', 'biceps', 'triceps'];
 
     const fillPlan = () => {
-        if (!exercisesDB || exercisesDB.length === 0) {
-            Alert.alert('Brak ćwiczeń', 'Nie udało się pobrać ćwiczeń z bazy.');
-            return;
-        }
+        const muscleScore = {};
 
-        const coveredMuscles = new Set();
-        currentExercises.forEach(ex => ex.muscle_group?.forEach(mg => coveredMuscles.add(mg.name)));
+        currentExercises.forEach(ex => {
+            const full = exercisesDB.find(e => e.id === ex.id);
+            if (!full) return;
 
-        const newSuggestions = [];
+            full.muscles.forEach(m => {
+                muscleScore[m.name] = (muscleScore[m.name] || 0) + m.ratio;
+            });
+        });
 
-        const availableExercises = exercisesDB.filter(
-            ex => !currentExercises.some(e => e.id === ex.id)
+        const musclesByNeed = [...priorityMuscles].sort(
+            (a,b) => (muscleScore[a] || 0) - (muscleScore[b] || 0)
         );
 
-        for (let muscle of priorityMuscles) {
-            if (newSuggestions.length + currentExercises.length >= maxExercises) break;
+        let availableExercises = exercisesDB.filter(ex => !currentExercises.some(e => e.id === ex.id));
 
-            const candidate = availableExercises.find(ex => ex.muscle_group.some(mg => mg.name === muscle) && !newSuggestions.some(e => e.id === ex.id));
+        const suggestions = [];
 
-            if (candidate) {
-                newSuggestions.push(candidate);
-            }
+        for (const muscle of musclesByNeed) {
+            if (currentExercises.length + suggestions.length >= maxExercises) break;
+
+            const candidates = availableExercises.filter(ex => ex.muscles.some(m => m.name === muscle));
+
+            if (!candidates.length) continue;
+
+            const compound = candidates.filter(c => c.category === 'Wielostawowe');
+            const pool = compound.length ? compound : candidates;
+
+            const chosen = pool[Math.floor(Math.random() * pool.length)];
+
+            suggestions.push(chosen);
+
+            availableExercises = availableExercises.filter(e => e.id !== chosen.id);
         }
 
-        if (newSuggestions.length === 0) {
+        if (!suggestions.length) {
             Alert.alert('Plan jest pełny', 'Nie ma brakujących ćwiczeń do dodania.');
             return;
         }
 
-        setSuggestedExercises(newSuggestions);
+        setSuggestedExercises(suggestions);
         setModalVisible(true);
     };
 
@@ -98,91 +110,91 @@ export const PlanFillerModal = ({ currentExercises, maxExercises = 9, onAddExerc
 };
 
 const styles = StyleSheet.create({
-  addBtn: {
-    backgroundColor: theme.colors.surfaceSoft,
-    borderRadius: 10,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: theme.colors.borderSoft,
-  },
-  addText: {
-    color: theme.colors.accent,
-    fontWeight: '700',
-  },
+    addBtn: {
+        backgroundColor: theme.colors.surfaceSoft,
+        borderRadius: 10,
+        paddingHorizontal: theme.spacing.md,
+        paddingVertical: theme.spacing.sm,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+    },
+    addText: {
+        color: theme.colors.accent,
+        fontWeight: '700',
+    },
 
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-  },
-  modalCard: {
-    width: '100%',
-    maxWidth: 380,
-    backgroundColor: theme.colors.surface,
-    borderRadius: 20,
-    padding: theme.spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 8,
-  },
-  closeBtn: {
-    position: 'absolute',
-    top: theme.spacing.sm,
-    right: theme.spacing.sm,
-    padding: 6,
-    zIndex: 10,
-  },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 12,
+    },
+    modalCard: {
+        width: '100%',
+        maxWidth: 380,
+        backgroundColor: theme.colors.surface,
+        borderRadius: 20,
+        padding: theme.spacing.md,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.25,
+        shadowRadius: 10,
+        elevation: 8,
+    },
+    closeBtn: {
+        position: 'absolute',
+        top: theme.spacing.sm,
+        right: theme.spacing.sm,
+        padding: 6,
+        zIndex: 10,
+    },
 
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: theme.colors.textPrimary,
-    marginBottom: theme.spacing.md,
-    textAlign: 'center',
-  },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: theme.colors.textPrimary,
+        marginBottom: theme.spacing.md,
+        textAlign: 'center',
+    },
 
-  scrollArea: {
-    maxHeight: 300,
-    marginBottom: theme.spacing.md,
-  },
+    scrollArea: {
+        maxHeight: 300,
+        marginBottom: theme.spacing.md,
+    },
 
-  exerciseItem: {
-    backgroundColor: theme.colors.surfaceSoft,
-    borderRadius: 12,
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.sm,
-  },
-  exerciseText: {
-    fontWeight: '600',
-    fontSize: 16,
-    color: theme.colors.textPrimary,
-  },
-  exerciseHint: {
-    fontSize: 12,
-    color: theme.colors.textMuted,
-    marginTop: 2,
-  },
+    exerciseItem: {
+        backgroundColor: theme.colors.surfaceSoft,
+        borderRadius: 12,
+        paddingVertical: theme.spacing.sm,
+        paddingHorizontal: theme.spacing.md,
+        marginBottom: theme.spacing.sm,
+    },
+    exerciseText: {
+        fontWeight: '600',
+        fontSize: 16,
+        color: theme.colors.textPrimary,
+    },
+    exerciseHint: {
+        fontSize: 12,
+        color: theme.colors.textMuted,
+        marginTop: 2,
+    },
 
-  modalBtns: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modalBtn: {
-    flex: 1,
-    paddingVertical: theme.spacing.sm,
-    marginHorizontal: 4,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalBtnText: {
-    fontWeight: '700',
-    color: '#fff',
-  },
+    modalBtns: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    modalBtn: {
+        flex: 1,
+        paddingVertical: theme.spacing.sm,
+        marginHorizontal: 4,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalBtnText: {
+        fontWeight: '700',
+        color: '#fff',
+    },
 });

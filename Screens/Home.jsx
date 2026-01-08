@@ -18,7 +18,7 @@ const Home = () => {
 
     return (
         <ImageBackground 
-            source={require('../assets/BackgroundImages/HomeHeader3.jpg')} 
+            source={require('../assets/BackgroundImages/HomeHeader.jpg')} 
             style={styles.background} 
             imageStyle={styles.backgroundImage}
         >

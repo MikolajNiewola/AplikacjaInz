@@ -1,54 +1,55 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, Switch } from 'react-native';
 import { theme } from '../../Themes/index';
+import { sanitizeNumber } from '../../utils/numberInput';
 
 
 const TempoInput = ({ tempo, setTempo }) => {
-  const refs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-  const [values, setValues] = useState(tempo ? tempo.split('-') : ['','','','']);
+    const refs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+    const [values, setValues] = useState(tempo ? tempo.split('-') : ['','','','']);
 
-  useEffect(() => {
-    setTempo(values.join('-'));
-  }, [values]);
+    useEffect(() => {
+        setTempo(values.join('-'));
+    }, [values]);
 
-  const handleChange = (index, val) => {
-    const cleaned = val.replace(/[^0-9]/g, '').slice(0,1);
-    let newValues = [...values];
-    newValues[index] = cleaned;
-    setValues(newValues);
+    const handleChange = (index, val) => {
+        const cleaned = val.replace(/[^0-9]/g, '').slice(0,1);
+        let newValues = [...values];
+        newValues[index] = cleaned;
+        setValues(newValues);
 
-    if (cleaned.length > 0 && index < 3) {
-      refs[index + 1].current?.focus();
-    }
-  };
+        if (cleaned.length > 0 && index < 3) {
+            refs[index + 1].current?.focus();
+        }
+    };
 
-  const handleKeyPress = (index, e) => {
-    if (e.nativeEvent.key === 'Backspace') {
-      if (values[index] === '' && index > 0) {
-        refs[index - 1].current?.focus();
-      }
-    }
-  };
+    const handleKeyPress = (index, e) => {
+        if (e.nativeEvent.key === 'Backspace') {
+            if (values[index] === '' && index > 0) {
+                refs[index - 1].current?.focus();
+            }
+        }
+    };
 
-  return (
-    <View style={styles.tempoInputRow}>
-      {values.map((val, i) => (
-        <React.Fragment key={i}>
-          <TextInput
-            ref={refs[i]}
-            value={val}
-            onChangeText={(text) => handleChange(i, text)}
-            onKeyPress={(e) => handleKeyPress(i, e)}
-            keyboardType="numeric"
-            style={styles.tempoInput}
-            maxLength={2}
-            textAlign="center"
-          />
-          {i < 3 && <Text style={styles.tempoDash}>-</Text>}
-        </React.Fragment>
-      ))}
-    </View>
-  )
+    return (
+        <View style={styles.tempoInputRow}>
+        {values.map((val, i) => (
+            <React.Fragment key={i}>
+            <TextInput
+                ref={refs[i]}
+                value={val}
+                onChangeText={(text) => handleChange(i, text)}
+                onKeyPress={(e) => handleKeyPress(i, e)}
+                keyboardType="numeric"
+                style={styles.tempoInput}
+                maxLength={2}
+                textAlign="center"
+            />
+            {i < 3 && <Text style={styles.tempoDash}>-</Text>}
+            </React.Fragment>
+        ))}
+        </View>
+    )
 };
 
 const AddExercise = ({ exercise, onChange, onRemove }) => {    
@@ -66,42 +67,15 @@ const AddExercise = ({ exercise, onChange, onRemove }) => {
     const incSetCounter = () => { setSets(prev => prev + 1); }
 
     useEffect(() => {
-        if (onChange) {
-            const numericWeight = weight === '' ? 0 : Number(weight);
-            onChange({ 
-              reps, 
-              sets, 
-              weight: numericWeight, 
-              tempo: useTempo ? tempo : null 
-            });
-        }
+        if (!onChange) return;
+
+        onChange({
+            reps,
+            sets,
+            weight: weight === '' ? 0 : Number(weight),
+            tempo: useTempo ? tempo : null,
+        });
     }, [reps, sets, weight, tempo, useTempo]);
-
-    const sanitizeNumber = (text) => {
-        let cleaned = String(text).replace(/[^0-9.]/g, '');
-        const parts = cleaned.split('.');
-
-        if (parts.length > 2) {
-            cleaned = parts[0] + '.' + parts.slice(1).join('');
-        }
-
-        let [intPart, decimalPart] = cleaned.split('.');
-
-        if (intPart.length > 1) {
-            intPart = intPart.replace(/^0+/, '');
-            if (intPart === '') intPart = '0';
-        }
-
-        if (decimalPart?.length > 2) {
-            decimalPart = decimalPart.slice(0, 2);
-        }
-
-        return decimalPart !== undefined ? `${intPart}.${decimalPart}` : intPart;
-    };
-
-    const handleWeightChange = (text) => {
-        setWeight(sanitizeNumber(text));
-    }
 
     const handleTempoChange = (text) => {
         const cleaned = text.replace(/[^0-9-]/g, '');
@@ -150,7 +124,7 @@ const AddExercise = ({ exercise, onChange, onRemove }) => {
                     placeholder="0"
                     placeholderTextColor={theme.colors.textMuted}
                     keyboardType="decimal-pad"
-                    onChangeText={handleWeightChange}
+                    onChangeText={(text) => setWeight(sanitizeNumber(text))}
                     style={styles.input}
                 />
             </View>

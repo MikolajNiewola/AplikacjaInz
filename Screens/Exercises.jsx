@@ -1,26 +1,40 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, ImageBackground } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, ImageBackground, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useExerciseStore } from '../ZustandStores/ExerciseStore';
+import { filterExercises } from '../utils/exerciseSearch';
 import { theme } from '../Themes/index';
 
-const ExerciseCard = ({ item, expanded, onToggle }) => {
+const ExerciseListCard = ({ item, expanded, onToggle }) => {
     const navigation = useNavigation();
+
+    const primaryMuscle = item.muscles?.[0]?.name;
 
     return (
         <View style={styles.card}>
-            <ImageBackground source={{ uri: item.image }} style={styles.banner} imageStyle={styles.bannerImage}>
+            <ImageBackground
+                source={{ uri: item.image }}
+                style={styles.banner}
+                imageStyle={styles.bannerImage}
+            >
                 <View style={styles.bannerOverlay} />
 
-                <View style={styles.bannerLabelContainer}>
-                    <Text style={styles.bannerLabel}>{item.type}</Text>
+                <View style={styles.badges}>
+                    <Text style={styles.badge}>{item.category}</Text>
+                    <Text style={styles.badge}>{item.movement}</Text>
                 </View>
 
                 <Text style={styles.title}>{item.name}</Text>
+
+                {primaryMuscle && (
+                    <Text style={styles.primaryMuscle}>
+                        Główna partia: {primaryMuscle}
+                    </Text>
+                )}
             </ImageBackground>
 
             <TouchableOpacity
-                style={[styles.toggleBtn]}
+                style={styles.toggleBtn}
                 onPress={() => onToggle(item.id)}
             >
                 <Text style={styles.toggleText}>
@@ -30,32 +44,45 @@ const ExerciseCard = ({ item, expanded, onToggle }) => {
 
             {expanded && (
                 <View style={styles.details}>
-                    <Text style={styles.detailLine}>
-                        Sprzęt: <Text style={styles.detailValue}>{item.equipment}</Text>
-                    </Text>
+                    {item.equipment?.length > 0 && (
+                        <Text style={styles.detailLine}>
+                            Sprzęt:{' '}
+                            <Text style={styles.detailValue}>
+                                {item.equipment.join(', ')}
+                            </Text>
+                        </Text>
+                    )}
 
                     <Text style={styles.detailLine}>
-                        Typ: <Text style={styles.detailValue}>{item.type}</Text> • Poziom:{' '}
+                        Typ:{' '}
+                        <Text style={styles.detailValue}>{item.type}</Text> • Poziom:{' '}
                         <Text style={styles.detailValue}>{item.difficulty}</Text>
                     </Text>
 
                     <TouchableOpacity
                         style={styles.mapBtn}
-                        onPress={() => navigation.navigate('Muscle Map', { exercises: [item] })}
+                        onPress={() => navigation.navigate('Muscle Map', { exercises: [item], preview: true })}
                     >
                         <Text style={styles.mapBtnText}>Sprawdź mapę mięśni</Text>
                     </TouchableOpacity>
 
-                    <Text style={styles.sectionTitle}>Instrukcje</Text>
-
-                    {item.instructions.map((inst, i) => (
-                        <Text key={i} style={styles.instructionLine}>
+                    {item.instructions?.length > 0 && (
+                        <>
+                        <Text style={styles.sectionTitle}>Instrukcje</Text>
+                        {item.instructions.map((inst, i) => (
+                            <Text key={i} style={styles.instructionLine}>
                             {i + 1}. {inst}
-                        </Text>
-                    ))}
+                            </Text>
+                        ))}
+                        </>
+                    )}
 
                     {item.video && (
-                        <Text style={styles.videoLink}>🎥 {item.video}</Text>
+                        <Image
+                            source={{ uri: item.video }}
+                            style={styles.video}
+                            resizeMode="contain"
+                        />
                     )}
                 </View>
             )}
@@ -74,79 +101,24 @@ const Exercises = () => {
     }, []);
 
     const toggle = (id) => {
-        setExpandedIds(prev => {
+        setExpandedIds((prev) => {
             const next = new Set(prev);
-            if (next.has(id)) next.delete(id);
-            else next.add(id);
+            next.has(id) ? next.delete(id) : next.add(id);
             return next;
         });
     };
 
-    const levenshtein = (a, b) => {
-        if (a.length === 0) return b.length;
-        if (b.length === 0) return a.length;
-
-        const matrix = Array.from({ length: b.length + 1 }, () =>
-            Array(a.length + 1).fill(0)
-        );
-
-        for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
-        for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
-
-        for (let j = 1; j <= b.length; j++) {
-            for (let i = 1; i <= a.length; i++) {
-                if (a[i - 1] === b[j - 1]) {
-                    matrix[j][i] = matrix[j - 1][i - 1];
-                } else {
-                    matrix[j][i] = Math.min(
-                        matrix[j - 1][i] + 1,
-                        matrix[j][i - 1] + 1,
-                        matrix[j - 1][i - 1] + 1
-                    );
-                }
-            }
-        }
-
-        return matrix[b.length][a.length];
-    };
-
-    const fuzzyMatch = (query, text, maxDistance = 2) => {
-        if (!text) return false;
-
-        const q = query.toLowerCase();
-        const t = text.toLowerCase();
-
-        if (t.includes(q)) return true;
-
-        const words = t.split(' ');
-
-        return words.some(word =>
-            levenshtein(q, word) <= maxDistance
-        );
-    };
-
-    const filteredExercises = useMemo(() => {
-        if (!query.trim()) return exercisesDB;
-
-        if (query.length < 3) return exercisesDB;
-
-        return exercisesDB.filter(ex => {
-            if (fuzzyMatch(query, ex.name)) return true;
-
-            if (ex.muscle_group?.some(mg =>
-                fuzzyMatch(query, mg.name)
-            )) return true;
-
-            return false;
-        });
-    }, [query, exercisesDB]);
+    const filteredExercises = useMemo(
+        () => filterExercises(exercisesDB, query),
+        [query, exercisesDB]
+    );
 
     return (
         <View style={styles.screen}>
             <TextInput
                 value={query}
                 onChangeText={setQuery}
-                placeholder="Wyszukaj ćwiczenie lub grupę mięśniową"
+                placeholder="Wyszukaj ćwiczenie lub mięsień"
                 placeholderTextColor={theme.colors.textMuted}
                 style={styles.search}
             />
@@ -156,11 +128,11 @@ const Exercises = () => {
                 keyExtractor={(item) => String(item.id)}
                 contentContainerStyle={styles.list}
                 renderItem={({ item }) => (
-                <ExerciseCard
-                    item={item}
-                    expanded={expandedIds.has(item.id)}
-                    onToggle={toggle}
-                />
+                    <ExerciseListCard
+                        item={item}
+                        expanded={expandedIds.has(item.id)}
+                        onToggle={toggle}
+                    />
                 )}
             />
         </View>
@@ -200,26 +172,8 @@ const styles = StyleSheet.create({
 
     banner: {
         height: 140,
-        backgroundColor: theme.colors.surfaceSoft,
         justifyContent: 'flex-end',
         padding: theme.spacing.md,
-    },
-
-    bannerLabelContainer: {
-        position: 'absolute',
-        top: 10,
-        right: 12,
-        backgroundColor: theme.colors.surfaceSoft,
-        paddingHorizontal: 8,
-        paddingVertical: 2,
-        borderRadius: 6,
-    },
-
-    bannerLabel: {
-        fontSize: 11,
-        color: theme.colors.accent,
-        textTransform: 'uppercase',
-        fontWeight: '700',
     },
 
     bannerImage: {
@@ -228,16 +182,38 @@ const styles = StyleSheet.create({
 
     bannerOverlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0,0,0,0.35)',
+        backgroundColor: 'rgba(0,0,0,0.4)',
+    },
+
+    badges: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        flexDirection: 'row',
+        gap: 6,
+    },
+
+    badge: {
+        backgroundColor: theme.colors.surfaceSoft,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 6,
+        fontSize: 11,
+        color: theme.colors.accent,
+        fontWeight: '700',
+        textTransform: 'uppercase',
     },
 
     title: {
         fontSize: 20,
         fontWeight: '800',
         color: '#fff',
-        textShadowColor: 'rgba(0,0,0,0.8)',
-        textShadowOffset: { width: 0, height: 2 },
-        textShadowRadius: 4,
+    },
+
+    primaryMuscle: {
+        marginTop: 4,
+        color: '#ddd',
+        fontSize: 12,
     },
 
     toggleBtn: {
@@ -248,10 +224,6 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.borderSoft,
     },
 
-    toggleBtnActive: {
-        backgroundColor: theme.colors.accentSoft,
-    },
-
     toggleText: {
         color: theme.colors.accent,
         fontWeight: '700',
@@ -259,7 +231,6 @@ const styles = StyleSheet.create({
 
     details: {
         padding: theme.spacing.md,
-        backgroundColor: theme.colors.surface,
     },
 
     detailLine: {
@@ -293,7 +264,6 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 14,
         textTransform: 'uppercase',
-        letterSpacing: 0.8,
     },
 
     instructionLine: {
@@ -302,12 +272,12 @@ const styles = StyleSheet.create({
         lineHeight: 20,
     },
 
-    videoLink: {
-        marginTop: theme.spacing.sm,
-        color: theme.colors.accent,
-        fontWeight: '600',
-    },
+    video: {
+        width: '100%',
+        height: 220,
+        borderRadius: 12,
+        marginTop: 12,
+    }
 });
-
 
 export default Exercises;

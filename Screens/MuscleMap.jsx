@@ -3,37 +3,33 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MuscleMapSVG from '../Components/MuscleMap/MuscleMapSVG.jsx';
 import { frontLayers, rearLayers } from '../Components/MuscleMap/MuscleMapLayers.jsx';
 import { useExerciseStore } from '../ZustandStores/ExerciseStore';
+import { calculateMuscleVolume } from '../utils/calculateMuscleVolume.js';
+import { calculateMusclePreview } from '../utils/calculateMusclePreview.js';
 import { theme } from '../Themes/index';
 
-const aggregateMuscleLoads = (exercises) => {
+const MuscleMap = ({ route })  => {
+    const [view, setView] = useState('front');
+    const toggleView = () => setView((prev) => (prev === 'front' ? 'rear' : 'front'));
+    
     const { exercisesDB, fetchExercises } = useExerciseStore();
 
     useEffect(() => {
         fetchExercises();
     }, []);
-    const aggregated = {};
 
-    exercises.forEach((exercise) => {
-        exercisesDB[exercise.id].muscle_group.forEach(({ name, load }) => {
-            aggregated[name] = (aggregated[name] || 0) + (load || 0);
-        });
-    });
+    const preview = route.params?.preview ?? false;
 
-    return aggregated;
-};
+    const planExercises = route.params.exercises || [];
+    const muscleVolumes = preview 
+        ? calculateMusclePreview(planExercises, exercisesDB)
+        : calculateMuscleVolume(planExercises, exercisesDB);
 
-const MuscleMap = ({ route })  => {
-    const [view, setView] = useState('front');
-    const toggleView = () => setView((prev) => (prev === 'front' ? 'rear' : 'front'));
-
-    const exercisesParam = route.params.exercises;
-    const muscleLoads = aggregateMuscleLoads(exercisesParam);
     const currentLayers = view === 'front' ? frontLayers : rearLayers;
 
     return (
         <View style={styles.container}>
             <View style={styles.mapContainer}>
-                <MuscleMapSVG layers={currentLayers} muscleLoads={muscleLoads} />
+                <MuscleMapSVG layers={currentLayers} muscleVolumes={muscleVolumes} preview={preview} />
             </View>
 
             <TouchableOpacity style={styles.toggleButton} onPress={toggleView}>
