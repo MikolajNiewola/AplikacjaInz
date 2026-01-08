@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useExerciseStore } from '../ZustandStores/ExerciseStore';
 import { filterExercises } from '../utils/exerciseSearch';
 import { theme } from '../Themes/index';
+import FastImage from 'react-native-fast-image'
 
 const ExerciseListCard = ({ item, expanded, onToggle }) => {
     const navigation = useNavigation();
@@ -78,7 +79,7 @@ const ExerciseListCard = ({ item, expanded, onToggle }) => {
                     )}
 
                     {item.video && (
-                        <Image
+                        <FastImage
                             source={{ uri: item.video }}
                             style={styles.video}
                             resizeMode="contain"
