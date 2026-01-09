@@ -6,7 +6,7 @@ import { theme } from '../../Themes/index';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay';
 
-const ExerciseCard = ({ exercise }) => {
+const ExerciseCard = ({ exercise, onShowVideo }) => {
     const { exercisesDB } = useExerciseStore();
     const navigation = useNavigation();
     
@@ -63,6 +63,16 @@ const ExerciseCard = ({ exercise }) => {
                 </View>
             )}
 
+            {exerciseData?.video && (
+                <TouchableOpacity
+                    style={styles.videoBtn}
+                    onPress={() => onShowVideo(exerciseData)}
+                >
+                    <FontAwesomeIcon icon={faPlay} size={14} color={theme.colors.accent} />
+                    <Text style={styles.videoBtnText}>Instrukcja wideo</Text>
+                </TouchableOpacity>
+            )}
+
             {exerciseData?.instructions?.length > 0 && (
                 <TouchableOpacity
                     style={styles.toggleBtn}
@@ -111,15 +121,15 @@ const styles = StyleSheet.create({
     statsRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: theme.spacing.md,
+        marginBottom: theme.spacing.sm,
     },
 
     stat: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: theme.colors.surfaceSoft,
-        paddingVertical: 10,
-        marginHorizontal: 4,
+        paddingVertical: 8,
+        marginHorizontal: 5,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: theme.colors.borderSoft,
@@ -134,7 +144,6 @@ const styles = StyleSheet.create({
     statLabel: {
         color: theme.colors.textMuted,
         fontSize: theme.typography.small.fontSize,
-        marginTop: 2,
     },
 
     tempoBox: {
@@ -151,11 +160,10 @@ const styles = StyleSheet.create({
         fontSize: 12,
         textTransform: 'uppercase',
         letterSpacing: 1,
-        marginBottom: 6,
     },
 
     tempoValueBig: {
-        fontSize: 22,
+        fontSize: 18,
         fontWeight: '800',
         color: theme.colors.accent,
         textAlign: 'center',
@@ -221,6 +229,19 @@ const styles = StyleSheet.create({
         fontSize: theme.typography.small.fontSize,
         lineHeight: 20,
         flex: 1,
+    },
+
+    videoBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: theme.spacing.md,
+    },
+
+    videoBtnText: {
+        color: theme.colors.accent,
+        fontWeight: '700',
+        fontSize: 14,
     },
 });
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Alert, Touchable } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExerciseCard from './ExerciseCard';
 import { theme } from '../../Themes/index';
@@ -13,6 +14,7 @@ const ViewPlan = ({ route }) => {
     const { plan: initialPlan } = route.params;
 
     const [plan, setPlan] = useState(initialPlan);
+    const [videoExercise, setVideoExercise] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useFocusEffect(
@@ -84,34 +86,34 @@ const ViewPlan = ({ route }) => {
 
     return (
         <View style={styles.container}>
-        <View style={styles.header}>
-            <Text style={styles.title}>{plan.name}</Text>
+            <View style={styles.header}>
+                <Text style={styles.title}>{plan.name}</Text>
 
-            <View style={styles.headerActions}>
-            <TouchableOpacity
-                style={styles.editBtn}
-                onPress={() => handleEdit()}
-            >
-                <Text style={styles.editText}>Edytuj</Text>
-            </TouchableOpacity>
+                <View style={styles.headerActions}>
+                <TouchableOpacity
+                    style={styles.editBtn}
+                    onPress={() => handleEdit()}
+                >
+                    <Text style={styles.editText}>Edytuj</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-                style={styles.deleteBtn}
-                onPress={handleDelete}
-            >
-                <Text style={styles.deleteText}>Usuń</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.deleteBtn}
+                    onPress={handleDelete}
+                >
+                    <Text style={styles.deleteText}>Usuń</Text>
+                </TouchableOpacity>
+                </View>
             </View>
-        </View>
 
-        <TouchableOpacity
-            style={styles.mapBtn}
-            onPress={() => viewMuscleMap()}
-        >
-            <Text style={styles.mapText}>Sprawdź mapę mięśni</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.mapBtn}
+                onPress={() => viewMuscleMap()}
+            >
+                <Text style={styles.mapText}>Sprawdź mapę mięśni</Text>
+            </TouchableOpacity>
 
-        <Text style={styles.sectionTitle}>Ćwiczenia</Text>
+            <Text style={styles.sectionTitle}>Ćwiczenia</Text>
 
         
             <View style={styles.exerciseCardWrapper}>
@@ -136,12 +138,44 @@ const ViewPlan = ({ route }) => {
                 </View>
                 <ScrollView
                     style={{ flex: 1 }}
-                    contentContainerStyle={{ paddingBottom: 24 }}
+                    contentContainerStyle={{ paddingBottom: 0 }}
                     showsVerticalScrollIndicator={false}
                 >
-                    <ExerciseCard exercise={plan.exercises[currentIndex]} />
+                    <ExerciseCard 
+                        exercise={plan.exercises[currentIndex]}
+                        onShowVideo={(exercise) => setVideoExercise(exercise)} 
+                    />
                 </ScrollView>
             </View>
+
+            {videoExercise && (
+                <View style={styles.videoOverlay}>
+                    <TouchableOpacity
+                        style={styles.videoBackdrop}
+                        activeOpacity={1}
+                        onPress={() => setVideoExercise(null)}
+                    />
+
+                    <View style={styles.videoModal}>
+                        <Text style={styles.videoTitle}>
+                            {videoExercise.name}
+                        </Text>
+
+                        <FastImage
+                            source={{ uri: videoExercise.video }}
+                            style={styles.video}
+                            resizeMode={FastImage.resizeMode.contain}
+                        />
+
+                        <TouchableOpacity
+                            style={styles.videoCloseBtn}
+                            onPress={() => setVideoExercise(null)}
+                        >
+                            <Text style={styles.videoCloseText}>Zamknij</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )}
         </View>
     );
 };
@@ -223,7 +257,7 @@ const styles = StyleSheet.create({
         borderRadius: 14,
         borderWidth: 1,
         borderColor: theme.colors.border,
-        marginBottom: theme.spacing.md,
+        // marginBottom: theme.spacing.md,
         overflow: 'hidden',
     },
 
@@ -268,6 +302,58 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         textTransform: 'uppercase',
     },
+
+    videoOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        zIndex: 999,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    videoBackdrop: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+    },
+
+    videoModal: {
+        width: '90%',
+        backgroundColor: theme.colors.surface,
+        borderRadius: 20,
+        padding: theme.spacing.md,
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+    },
+
+    videoTitle: {
+        textAlign: 'center',
+        fontWeight: '800',
+        fontSize: 16,
+        color: theme.colors.textPrimary,
+        marginBottom: 12,
+    },
+
+    video: {
+        width: '100%',
+        height: 260,
+        borderRadius: 14,
+        backgroundColor: theme.colors.surfaceSoft,
+    },
+
+    videoCloseBtn: {
+        marginTop: theme.spacing.md,
+        paddingVertical: 12,
+        borderRadius: 12,
+        backgroundColor: theme.colors.surfaceSoft,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+    },
+
+    videoCloseText: {
+        color: theme.colors.textPrimary,
+        fontWeight: '700',
+    },
+
 });
 
 

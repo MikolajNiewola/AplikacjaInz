@@ -79,11 +79,17 @@ const ExerciseListCard = ({ item, expanded, onToggle }) => {
                     )}
 
                     {item.video && (
-                        <FastImage
-                            source={{ uri: item.video }}
-                            style={styles.video}
-                            resizeMode="contain"
-                        />
+                        <View style={styles.videoSection}>
+                            <Text style={styles.videoTitle}>Technika wykonania</Text>
+
+                            <View style={styles.videoWrapper}>
+                                <FastImage
+                                    source={{ uri: item.video }}
+                                    style={styles.video}
+                                    resizeMode={FastImage.resizeMode.contain}
+                                />
+                            </View>
+                        </View>
                     )}
                 </View>
             )}
@@ -273,12 +279,32 @@ const styles = StyleSheet.create({
         lineHeight: 20,
     },
 
+    videoSection: {
+        marginTop: theme.spacing.md,
+    },
+
+    videoTitle: {
+        fontSize: 14,
+        fontWeight: '800',
+        color: theme.colors.textPrimary,
+        marginBottom: 8,
+        textTransform: 'uppercase',
+    },
+
+    videoWrapper: {
+        backgroundColor: theme.colors.surfaceSoft,
+        borderRadius: 16,
+        padding: 8,
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+    },
+
     video: {
         width: '100%',
         height: 220,
         borderRadius: 12,
-        marginTop: 12,
-    }
+    },
+
 });
 
 export default Exercises;
