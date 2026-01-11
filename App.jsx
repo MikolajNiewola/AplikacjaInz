@@ -20,6 +20,7 @@ import ViewPlan from './Components/WorkoutPlans/ViewPlan';
 import SelectExercises from './Components/WorkoutPlans/SelectExercises';
 import TempoTimer from './Components/WorkoutPlans/TempoTimer';
 import UserProfileModal from './Components/User/UserProfileModal';
+import { useExerciseStore } from './ZustandStores/ExerciseStore';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -110,11 +111,13 @@ const TabsNavigator = () => {
 function App() {
     const [appReady, setAppReady] = useState(false);
 
+    const { fetchExercises } = useExerciseStore();
     const { isInitialized, loadProfile } = useUserProfileStore();
 
     useEffect(() => {
         const init = async () => {
             try {
+                fetchExercises();
                 await loadProfile();
             } catch (e) {
                 console.error('Init error: ', e);
