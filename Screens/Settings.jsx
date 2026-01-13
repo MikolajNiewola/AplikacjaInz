@@ -66,13 +66,10 @@ const Settings = ()  => {
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            clearMediaCache(); // DO USUNIECIA
-
                             await AsyncStorage.multiRemove([
                                 'workouts',
                                 'exercise_records',
                                 'user_profile',
-                                'exercises' // DO USUNIECIA
                             ]);
 
                             await resetProfile();

@@ -1,15 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, ImageBackground, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, ImageBackground, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useExerciseStore } from '../ZustandStores/ExerciseStore';
 import { filterExercises } from '../utils/exerciseSearch';
 import { theme } from '../Themes/index';
 import FastImage from 'react-native-fast-image'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
-const ExerciseListCard = ({ item, expanded, onToggle }) => {
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+const ExerciseListCard = ({ item, expanded, onToggle, onShowVideo }) => {
     const navigation = useNavigation();
-
-    const primaryMuscle = item.muscles?.[0]?.name;
+    const primaryMuscle = item.muscles[0].name;
 
     return (
         <View style={styles.card}>
@@ -82,13 +85,12 @@ const ExerciseListCard = ({ item, expanded, onToggle }) => {
                         <View style={styles.videoSection}>
                             <Text style={styles.videoTitle}>Technika wykonania</Text>
 
-                            <View style={styles.videoWrapper}>
-                                <FastImage
-                                    source={{ uri: item.video }}
-                                    style={styles.video}
-                                    resizeMode={FastImage.resizeMode.contain}
-                                />
-                            </View>
+                            <TouchableOpacity
+                                style={styles.watchBtn}
+                                onPress={() => onShowVideo(item)}
+                            >
+                                <Text style={styles.watchBtnText}><FontAwesomeIcon icon={faPlay} size={14} color={theme.colors.accent}/> Sprawdź technikę</Text>
+                            </TouchableOpacity>
                         </View>
                     )}
                 </View>
@@ -98,10 +100,13 @@ const ExerciseListCard = ({ item, expanded, onToggle }) => {
 };
 
 const Exercises = () => {
+    const { exercisesDB, fetchExercises } = useExerciseStore();
+
     const [expandedIds, setExpandedIds] = useState(new Set());
+    const [videoExercise, setVideoExercise] = useState(null);
+
     const [query, setQuery] = useState('');
 
-    const { exercisesDB, fetchExercises } = useExerciseStore();
 
     useEffect(() => {
         fetchExercises();
@@ -139,9 +144,36 @@ const Exercises = () => {
                         item={item}
                         expanded={expandedIds.has(item.id)}
                         onToggle={toggle}
+                        onShowVideo={(exercise) => setVideoExercise(exercise)} 
                     />
                 )}
             />
+
+            {videoExercise && (
+                <View style={styles.videoOverlay}>
+                    <TouchableOpacity
+                        style={styles.videoBackdrop}
+                        activeOpacity={1}
+                        onPress={() => setVideoExercise(null)}
+                    />
+
+                    <TouchableWithoutFeedback
+                        onPress={() => setVideoExercise(null)}
+                    >
+                        <View style={styles.videoModal}>
+                            <Text style={styles.videoTitle}>
+                                {videoExercise.name}
+                            </Text>
+
+                            <FastImage
+                                source={{ uri: videoExercise.video }}
+                                style={styles.video}
+                                resizeMode={FastImage.resizeMode.contain}
+                            />
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+            )}
         </View>
     );
 };
@@ -291,18 +323,73 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
     },
 
-    videoWrapper: {
+    watchBtn: {
+        marginTop: 6,
+        paddingVertical: 12,
+        borderRadius: 14,
         backgroundColor: theme.colors.surfaceSoft,
-        borderRadius: 16,
-        padding: 8,
         borderWidth: 1,
         borderColor: theme.colors.borderSoft,
+        alignItems: 'center',
+    },
+
+    watchBtnText: {
+        color: theme.colors.accent,
+        fontWeight: '800',
+        fontSize: 14,
+    },
+
+    videoOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        zIndex: 999,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    videoBackdrop: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+    },
+
+    videoModal: {
+        maxHeight: SCREEN_HEIGHT * 0.9,
+        backgroundColor: theme.colors.surface,
+        borderRadius: 20,
+        padding: theme.spacing.md,
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+        alignItems: 'center',
+    },
+
+    videoTitle: {
+        textAlign: 'center',
+        fontWeight: '800',
+        fontSize: 16,
+        color: theme.colors.textPrimary,
+        marginBottom: 12,
     },
 
     video: {
         width: '100%',
-        height: 220,
+        aspectRatio: 9 / 16,
+        maxHeight: SCREEN_HEIGHT * 0.7,
+        borderRadius: 14,
+        backgroundColor: theme.colors.surfaceSoft,
+    },
+
+    videoCloseBtn: {
+        marginTop: theme.spacing.md,
+        paddingVertical: 12,
         borderRadius: 12,
+        backgroundColor: theme.colors.surfaceSoft,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.colors.borderSoft,
+    },
+
+    videoCloseText: {
+        color: theme.colors.textPrimary,
+        fontWeight: '700',
     },
 
 });

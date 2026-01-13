@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Alert, Touchable } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Alert, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,8 @@ import { theme } from '../../Themes/index';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faRightLong } from '@fortawesome/free-solid-svg-icons/faRightLong';
 import { faLeftLong } from '@fortawesome/free-solid-svg-icons/faLeftLong';
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const ViewPlan = ({ route }) => {
     const navigation = useNavigation();
@@ -156,24 +158,21 @@ const ViewPlan = ({ route }) => {
                         onPress={() => setVideoExercise(null)}
                     />
 
-                    <View style={styles.videoModal}>
-                        <Text style={styles.videoTitle}>
-                            {videoExercise.name}
-                        </Text>
+                    <TouchableWithoutFeedback
+                        onPress={() => setVideoExercise(null)}
+                    >
+                        <View style={styles.videoModal}>
+                            <Text style={styles.videoTitle}>
+                                {videoExercise.name}
+                            </Text>
 
-                        <FastImage
-                            source={{ uri: videoExercise.video }}
-                            style={styles.video}
-                            resizeMode={FastImage.resizeMode.contain}
-                        />
-
-                        <TouchableOpacity
-                            style={styles.videoCloseBtn}
-                            onPress={() => setVideoExercise(null)}
-                        >
-                            <Text style={styles.videoCloseText}>Zamknij</Text>
-                        </TouchableOpacity>
-                    </View>
+                            <FastImage
+                                source={{ uri: videoExercise.video }}
+                                style={styles.video}
+                                resizeMode={FastImage.resizeMode.contain}
+                            />
+                        </View>
+                    </TouchableWithoutFeedback>
                 </View>
             )}
         </View>
@@ -257,7 +256,6 @@ const styles = StyleSheet.create({
         borderRadius: 14,
         borderWidth: 1,
         borderColor: theme.colors.border,
-        // marginBottom: theme.spacing.md,
         overflow: 'hidden',
     },
 
@@ -316,12 +314,13 @@ const styles = StyleSheet.create({
     },
 
     videoModal: {
-        width: '90%',
+        maxHeight: SCREEN_HEIGHT * 0.9,
         backgroundColor: theme.colors.surface,
         borderRadius: 20,
         padding: theme.spacing.md,
         borderWidth: 1,
         borderColor: theme.colors.borderSoft,
+        alignItems: 'center',
     },
 
     videoTitle: {
@@ -334,7 +333,8 @@ const styles = StyleSheet.create({
 
     video: {
         width: '100%',
-        height: 260,
+        aspectRatio: 9 / 16,
+        maxHeight: SCREEN_HEIGHT * 0.7,
         borderRadius: 14,
         backgroundColor: theme.colors.surfaceSoft,
     },
