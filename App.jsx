@@ -21,6 +21,7 @@ import SelectExercises from './Components/WorkoutPlans/SelectExercises';
 import TempoTimer from './Components/WorkoutPlans/TempoTimer';
 import UserProfileModal from './Components/User/UserProfileModal';
 import { useExerciseStore } from './ZustandStores/ExerciseStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
